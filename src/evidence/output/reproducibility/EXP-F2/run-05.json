@@ -1,0 +1,146 @@
+{
+  "case_id": "EXP-F2",
+  "run": 5,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T06:46:39.523Z",
+  "chunkText": "1\n00:00:00,000 --> 00:00:04,000\nEngsel kiri dan engsel kanan pada laptop ini sama-sama terasa kokoh saat dibuka tutup.\n\n2\n00:00:04,500 --> 00:00:09,000\nStorage yang digunakan adalah SSD NVMe 512GB dengan kecepatan baca tinggi.\n\n3\n00:00:09,500 --> 00:00:14,000\nPort USB-C bagian depan dan port USB-C bagian belakang sama-sama mendukung pengisian daya cepat.\n\n4\n00:00:14,500 --> 00:00:19,000\nBobot perangkat berada di kisaran 1,8 kg dengan material bodi aluminium.\n\n5\n00:00:19,500 --> 00:00:24,000\nKipas pendingin kiri dan kipas pendingin kanan sama-sama berputar lebih kencang saat beban tinggi.\n\n6\n00:00:24,500 --> 00:00:29,000\nkamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light.",
+  "chunk_sha256": "254dd14767afda56f032102692afbf49a24ce76a1d46b8779a785c41420a9f42",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"durability\",\n    \"subtopic\": \"ergonomics\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai engsel kiri dan engsel kanan pada laptop ini sama-sama terasa kokoh saat dibuka tutup.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"saat dibuka tutup\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"positive\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Engsel kiri dan engsel kanan pada laptop ini sama-sama terasa kokoh saat dibuka tutup\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"storage\",\n    \"subtopic\": \"storage_capacity\",\n    \"type\": \"FACT\",\n    \"claim\": \"Storage yang digunakan adalah SSD NVMe 512GB.\",\n    \"value\": \"512\",\n    \"unit\": \"GB\",\n    \"context\": \"SSD NVMe\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Storage yang digunakan adalah SSD NVMe 512GB\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"storage\",\n    \"subtopic\": null,\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Storage SSD NVMe memiliki kecepatan baca tinggi.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"SSD NVMe 512GB\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"dengan kecepatan baca tinggi\"\n  },\n  {\n    \"evidence_id\": \"E004\",\n    \"topic\": \"connectivity\",\n    \"subtopic\": null,\n    \"type\": \"FACT\",\n    \"claim\": \"Port USB-C bagian depan dan port USB-C bagian belakang sama-sama mendukung pengisian daya cepat.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"port USB-C bagian depan dan port USB-C bagian belakang\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Port USB-C bagian depan dan port USB-C bagian belakang sama-sama mendukung pengisian daya cepat\"\n  },\n  {\n    \"evidence_id\": \"E005\",\n    \"topic\": \"design\",\n    \"subtopic\": \"weight\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"Bobot perangkat berada di kisaran 1,8 kg.\",\n    \"value\": \"1,8\",\n    \"unit\": \"kg\",\n    \"context\": \"bobot perangkat\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Bobot perangkat berada di kisaran 1,8 kg\"\n  },\n  {\n    \"evidence_id\": \"E006\",\n    \"topic\": \"design\",\n    \"subtopic\": \"material\",\n    \"type\": \"FACT\",\n    \"claim\": \"Material bodi perangkat adalah aluminium.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"material bodi\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"dengan material bodi aluminium\"\n  },\n  {\n    \"evidence_id\": \"E007\",\n    \"topic\": \"performance\",\n    \"subtopic\": null,\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Kipas pendingin kiri dan kipas pendingin kanan sama-sama berputar lebih kencang saat beban tinggi.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"saat beban tinggi\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Kipas pendingin kiri dan kipas pendingin kanan sama-sama berputar lebih kencang saat beban tinggi\"\n  },\n  {\n    \"evidence_id\": \"E008\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Kamera selfie dan ultrawide perlu peningkatan, terutama di kondisi low light.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kondisi low light\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "durability",
+      "subtopic": "ergonomics",
+      "type": "OPINION",
+      "claim": "Reviewer menilai engsel kiri dan engsel kanan pada laptop ini sama-sama terasa kokoh saat dibuka tutup.",
+      "value": null,
+      "unit": null,
+      "context": "saat dibuka tutup",
+      "comparison_target": null,
+      "reviewer_assessment": "positive",
+      "certainty": "explicit",
+      "source_excerpt": "Engsel kiri dan engsel kanan pada laptop ini sama-sama terasa kokoh saat dibuka tutup"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "storage",
+      "subtopic": "storage_capacity",
+      "type": "FACT",
+      "claim": "Storage yang digunakan adalah SSD NVMe 512GB.",
+      "value": "512",
+      "unit": "GB",
+      "context": "SSD NVMe",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Storage yang digunakan adalah SSD NVMe 512GB"
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "storage",
+      "subtopic": null,
+      "type": "OBSERVATION",
+      "claim": "Storage SSD NVMe memiliki kecepatan baca tinggi.",
+      "value": null,
+      "unit": null,
+      "context": "SSD NVMe 512GB",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "dengan kecepatan baca tinggi"
+    },
+    {
+      "evidence_id": "E004",
+      "topic": "connectivity",
+      "subtopic": null,
+      "type": "FACT",
+      "claim": "Port USB-C bagian depan dan port USB-C bagian belakang sama-sama mendukung pengisian daya cepat.",
+      "value": null,
+      "unit": null,
+      "context": "port USB-C bagian depan dan port USB-C bagian belakang",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Port USB-C bagian depan dan port USB-C bagian belakang sama-sama mendukung pengisian daya cepat"
+    },
+    {
+      "evidence_id": "E005",
+      "topic": "design",
+      "subtopic": "weight",
+      "type": "MEASUREMENT",
+      "claim": "Bobot perangkat berada di kisaran 1,8 kg.",
+      "value": "1,8",
+      "unit": "kg",
+      "context": "bobot perangkat",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Bobot perangkat berada di kisaran 1,8 kg"
+    },
+    {
+      "evidence_id": "E006",
+      "topic": "design",
+      "subtopic": "material",
+      "type": "FACT",
+      "claim": "Material bodi perangkat adalah aluminium.",
+      "value": null,
+      "unit": null,
+      "context": "material bodi",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "dengan material bodi aluminium"
+    },
+    {
+      "evidence_id": "E007",
+      "topic": "performance",
+      "subtopic": null,
+      "type": "OBSERVATION",
+      "claim": "Kipas pendingin kiri dan kipas pendingin kanan sama-sama berputar lebih kencang saat beban tinggi.",
+      "value": null,
+      "unit": null,
+      "context": "saat beban tinggi",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Kipas pendingin kiri dan kipas pendingin kanan sama-sama berputar lebih kencang saat beban tinggi"
+    },
+    {
+      "evidence_id": "E008",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "OPINION",
+      "claim": "Kamera selfie dan ultrawide perlu peningkatan, terutama di kondisi low light.",
+      "value": null,
+      "unit": null,
+      "context": "kondisi low light",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "violations": [],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "shared_predicate_ownership",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      }
+    ]
+  }
+}

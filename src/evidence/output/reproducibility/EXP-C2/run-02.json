@@ -1,0 +1,94 @@
+{
+  "case_id": "EXP-C2",
+  "run": 2,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T07:00:32.263Z",
+  "chunkText": "1\n00:00:01,000 --> 00:00:06,000\nSpeaker dan mikrofon pada laptop ini sama-sama menghasilkan kualitas suara yang kurang jernih saat dipakai untuk video call.\n\n2\n00:00:06,500 --> 00:00:12,000\nBrightness dan refresh rate pada layar ini sama-sama terasa kurang maksimal saat dipakai di bawah sinar matahari langsung.",
+  "chunk_sha256": "76194236233a129bb39c37bdab7eeed59aac05d0d96a7f5e4be9438f7454b95b",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"audio\",\n    \"subtopic\": \"speaker\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai kualitas suara speaker kurang jernih saat dipakai untuk video call.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"pemakaian untuk video call\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Speaker dan mikrofon pada laptop ini sama-sama menghasilkan kualitas suara yang kurang jernih saat dipakai untuk video call.\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"audio\",\n    \"subtopic\": \"microphone\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai kualitas suara mikrofon kurang jernih saat dipakai untuk video call.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"pemakaian untuk video call\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Speaker dan mikrofon pada laptop ini sama-sama menghasilkan kualitas suara yang kurang jernih saat dipakai untuk video call.\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"display\",\n    \"subtopic\": \"brightness\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai brightness pada layar terasa kurang maksimal saat dipakai di bawah sinar matahari langsung.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"pemakaian di bawah sinar matahari langsung\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Brightness dan refresh rate pada layar ini sama-sama terasa kurang maksimal saat dipakai di bawah sinar matahari langsung.\"\n  },\n  {\n    \"evidence_id\": \"E004\",\n    \"topic\": \"display\",\n    \"subtopic\": \"refresh_rate\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai refresh rate pada layar terasa kurang maksimal saat dipakai di bawah sinar matahari langsung.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"pemakaian di bawah sinar matahari langsung\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Brightness dan refresh rate pada layar ini sama-sama terasa kurang maksimal saat dipakai di bawah sinar matahari langsung.\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "audio",
+      "subtopic": "speaker",
+      "type": "OPINION",
+      "claim": "Reviewer menilai kualitas suara speaker kurang jernih saat dipakai untuk video call.",
+      "value": null,
+      "unit": null,
+      "context": "pemakaian untuk video call",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "Speaker dan mikrofon pada laptop ini sama-sama menghasilkan kualitas suara yang kurang jernih saat dipakai untuk video call."
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "audio",
+      "subtopic": "microphone",
+      "type": "OPINION",
+      "claim": "Reviewer menilai kualitas suara mikrofon kurang jernih saat dipakai untuk video call.",
+      "value": null,
+      "unit": null,
+      "context": "pemakaian untuk video call",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "Speaker dan mikrofon pada laptop ini sama-sama menghasilkan kualitas suara yang kurang jernih saat dipakai untuk video call."
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "display",
+      "subtopic": "brightness",
+      "type": "OPINION",
+      "claim": "Reviewer menilai brightness pada layar terasa kurang maksimal saat dipakai di bawah sinar matahari langsung.",
+      "value": null,
+      "unit": null,
+      "context": "pemakaian di bawah sinar matahari langsung",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "Brightness dan refresh rate pada layar ini sama-sama terasa kurang maksimal saat dipakai di bawah sinar matahari langsung."
+    },
+    {
+      "evidence_id": "E004",
+      "topic": "display",
+      "subtopic": "refresh_rate",
+      "type": "OPINION",
+      "claim": "Reviewer menilai refresh rate pada layar terasa kurang maksimal saat dipakai di bawah sinar matahari langsung.",
+      "value": null,
+      "unit": null,
+      "context": "pemakaian di bawah sinar matahari langsung",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "Brightness dan refresh rate pada layar ini sama-sama terasa kurang maksimal saat dipakai di bawah sinar matahari langsung."
+    }
+  ],
+  "validation": {
+    "status": "FAIL",
+    "violations": [
+      "SHARED_PREDICATE_DUPLICATE_SPLIT: subjects=\"brightness + refresh rate\", 2 evidence masing-masing memuat seluruh subjek (proposisi disalin ke lebih dari satu evidence)"
+    ],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "shared_predicate_ownership",
+        "status": "FAIL",
+        "violations": [
+          "SHARED_PREDICATE_DUPLICATE_SPLIT: subjects=\"brightness + refresh rate\", 2 evidence masing-masing memuat seluruh subjek (proposisi disalin ke lebih dari satu evidence)"
+        ],
+        "unavailable": []
+      }
+    ]
+  }
+}

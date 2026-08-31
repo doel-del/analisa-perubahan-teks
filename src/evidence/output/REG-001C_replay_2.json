@@ -1,0 +1,28 @@
+{
+  "case_id": "REG-001C",
+  "failure_type": "PARAPHRASED_EXCERPT",
+  "fixture": "failure-reg-006.txt",
+  "model": "gemini-3.5-flash-lite",
+  "prompt_version": "v4.3",
+  "temperature": 0.1,
+  "timestamp": "2026-08-17T14:50:42.710Z",
+  "chunkText": "Segment 367:\r\nOke, terlepas dari kekurangan yang kami sebutkan tadi, kamera smartphone ini bisa kami katakan sudah sangat mumpuni dan bisa diandalkan untuk digunakan sehari-hari.\r\n\r\nSegment 368:\r\nOke, itu dia tadi pembahasan dari Samsung Galaxy A26 5G.",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"camera\",\n    \"subtopic\": null,\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai kamera smartphone ini sudah sangat mumpuni dan bisa diandalkan untuk digunakan sehari-hari.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"Samsung Galaxy A26 5G\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"positive\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera smartphone ini bisa kami katakan sudah sangat mumpuni dan bisa diandalkan untuk digunakan sehari-hari\"\n  }\n]",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "camera",
+      "subtopic": null,
+      "type": "OPINION",
+      "claim": "Reviewer menilai kamera smartphone ini sudah sangat mumpuni dan bisa diandalkan untuk digunakan sehari-hari.",
+      "value": null,
+      "unit": null,
+      "context": "Samsung Galaxy A26 5G",
+      "comparison_target": null,
+      "reviewer_assessment": "positive",
+      "certainty": "explicit",
+      "source_excerpt": "kamera smartphone ini bisa kami katakan sudah sangat mumpuni dan bisa diandalkan untuk digunakan sehari-hari"
+    }
+  ],
+  "errors": []
+}

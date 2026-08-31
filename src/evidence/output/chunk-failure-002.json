@@ -1,0 +1,27 @@
+{
+  "fixture": "chunk-failure-002.txt",
+  "model": "gemini-3.5-flash-lite",
+  "prompt_version": "v4.2",
+  "generation_config": {
+    "temperature": 0.1
+  },
+  "timestamp": "2026-08-16T02:53:53.985Z",
+  "chunkText": "Segment 358:\r\nKalau ditanya apa yang kurang bagi kami?\r\n\r\nSegment 359:\r\nYang pertama itu tidak ada opsi perekaman 60 fps di kamera selfie-nya.",
+  "rawOutput": "[\n  {\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"FACT\",\n    \"claim\": \"Kamera selfie tidak memiliki opsi perekaman 60 fps.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kamera selfie\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"tidak ada opsi perekaman 60 fps di kamera selfie-nya\"\n  }\n]",
+  "parsedEvidence": [
+    {
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "FACT",
+      "claim": "Kamera selfie tidak memiliki opsi perekaman 60 fps.",
+      "value": null,
+      "unit": null,
+      "context": "kamera selfie",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "tidak ada opsi perekaman 60 fps di kamera selfie-nya"
+    }
+  ],
+  "errors": []
+}

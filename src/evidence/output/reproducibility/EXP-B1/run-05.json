@@ -1,0 +1,118 @@
+{
+  "case_id": "EXP-B1",
+  "run": 5,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T03:02:37.040Z",
+  "chunkText": "1\n00:00:01,000 --> 00:00:06,000\nKamera selfie pada perangkat ini beresolusi 12MP, sedangkan kamera ultrawide beresolusi 8MP.\n\n2\n00:00:06,500 --> 00:00:12,000\nFPS rata-rata saat bermain Game A mencapai 60 FPS, sedangkan FPS rata-rata saat bermain Game B hanya 35 FPS.\n\n3\n00:00:12,500 --> 00:00:18,000\nBaterai bertahan sekitar 8 jam untuk pemakaian ringan, sedangkan baterai hanya bertahan sekitar 4 jam untuk pemakaian gaming intensif.",
+  "chunk_sha256": "230cea71bf442d50208b406d5f5c98044c2d48112e393fb0c0e484ca53ab1242",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"FACT\",\n    \"claim\": \"Kamera selfie pada perangkat beresolusi 12MP.\",\n    \"value\": \"12\",\n    \"unit\": \"MP\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Kamera selfie pada perangkat ini beresolusi 12MP\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"ultrawide\",\n    \"type\": \"FACT\",\n    \"claim\": \"Kamera ultrawide beresolusi 8MP.\",\n    \"value\": \"8\",\n    \"unit\": \"MP\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera ultrawide beresolusi 8MP\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"gaming\",\n    \"subtopic\": \"fps\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"FPS rata-rata saat bermain Game A mencapai 60 FPS.\",\n    \"value\": \"60\",\n    \"unit\": \"FPS\",\n    \"context\": \"pemakaian bermain Game A\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"FPS rata-rata saat bermain Game A mencapai 60 FPS\"\n  },\n  {\n    \"evidence_id\": \"E004\",\n    \"topic\": \"gaming\",\n    \"subtopic\": \"fps\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"FPS rata-rata saat bermain Game B hanya 35 FPS.\",\n    \"value\": \"35\",\n    \"unit\": \"FPS\",\n    \"context\": \"pemakaian bermain Game B\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"FPS rata-rata saat bermain Game B hanya 35 FPS\"\n  },\n  {\n    \"evidence_id\": \"E005\",\n    \"topic\": \"battery\",\n    \"subtopic\": \"battery_test\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"Baterai bertahan sekitar 8 jam untuk pemakaian ringan.\",\n    \"value\": \"8\",\n    \"unit\": \"jam\",\n    \"context\": \"pemakaian ringan\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Baterai bertahan sekitar 8 jam untuk pemakaian ringan\"\n  },\n  {\n    \"evidence_id\": \"E006\",\n    \"topic\": \"battery\",\n    \"subtopic\": \"battery_test\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"Baterai hanya bertahan sekitar 4 jam untuk pemakaian gaming intensif.\",\n    \"value\": \"4\",\n    \"unit\": \"jam\",\n    \"context\": \"pemakaian gaming intensif\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"baterai hanya bertahan sekitar 4 jam untuk pemakaian gaming intensif\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "FACT",
+      "claim": "Kamera selfie pada perangkat beresolusi 12MP.",
+      "value": "12",
+      "unit": "MP",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Kamera selfie pada perangkat ini beresolusi 12MP"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "camera",
+      "subtopic": "ultrawide",
+      "type": "FACT",
+      "claim": "Kamera ultrawide beresolusi 8MP.",
+      "value": "8",
+      "unit": "MP",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "kamera ultrawide beresolusi 8MP"
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "gaming",
+      "subtopic": "fps",
+      "type": "MEASUREMENT",
+      "claim": "FPS rata-rata saat bermain Game A mencapai 60 FPS.",
+      "value": "60",
+      "unit": "FPS",
+      "context": "pemakaian bermain Game A",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "FPS rata-rata saat bermain Game A mencapai 60 FPS"
+    },
+    {
+      "evidence_id": "E004",
+      "topic": "gaming",
+      "subtopic": "fps",
+      "type": "MEASUREMENT",
+      "claim": "FPS rata-rata saat bermain Game B hanya 35 FPS.",
+      "value": "35",
+      "unit": "FPS",
+      "context": "pemakaian bermain Game B",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "FPS rata-rata saat bermain Game B hanya 35 FPS"
+    },
+    {
+      "evidence_id": "E005",
+      "topic": "battery",
+      "subtopic": "battery_test",
+      "type": "MEASUREMENT",
+      "claim": "Baterai bertahan sekitar 8 jam untuk pemakaian ringan.",
+      "value": "8",
+      "unit": "jam",
+      "context": "pemakaian ringan",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Baterai bertahan sekitar 8 jam untuk pemakaian ringan"
+    },
+    {
+      "evidence_id": "E006",
+      "topic": "battery",
+      "subtopic": "battery_test",
+      "type": "MEASUREMENT",
+      "claim": "Baterai hanya bertahan sekitar 4 jam untuk pemakaian gaming intensif.",
+      "value": "4",
+      "unit": "jam",
+      "context": "pemakaian gaming intensif",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "baterai hanya bertahan sekitar 4 jam untuk pemakaian gaming intensif"
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "violations": [],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "required_properties",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      }
+    ]
+  }
+}

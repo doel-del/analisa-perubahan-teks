@@ -1,0 +1,160 @@
+{
+  "case_id": "EXP-F1",
+  "run": 4,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T06:46:15.083Z",
+  "chunkText": "1\n00:00:00,000 --> 00:00:04,000\nUntuk spesifikasi, laptop ini dibekali chipset Snapdragon 7 Gen 3 dan RAM 16GB.\n\n2\n00:00:04,500 --> 00:00:09,000\nStorage yang digunakan adalah SSD NVMe 512GB dengan kecepatan baca tinggi.\n\n3\n00:00:09,500 --> 00:00:14,000\nLayar menggunakan panel IPS 144Hz dengan tingkat kecerahan puncak 400 nits.\n\n4\n00:00:14,500 --> 00:00:19,000\nBobot perangkat berada di kisaran 1,8 kg dengan material bodi aluminium.\n\n5\n00:00:19,500 --> 00:00:24,000\nBaterai laptop ini berkapasitas 80Wh untuk pemakaian sehari-hari.\n\n6\n00:00:24,500 --> 00:00:29,000\nkamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light.",
+  "chunk_sha256": "88a08d3a28cda7a43108d664c74e564264e956fe004cf23f7f5172b15a1eae69",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"performance\",\n    \"subtopic\": \"chipset\",\n    \"type\": \"FACT\",\n    \"claim\": \"Laptop dibekali chipset Snapdragon 7 Gen 3.\",\n    \"value\": \"Snapdragon 7 Gen 3\",\n    \"unit\": null,\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"chipset Snapdragon 7 Gen 3\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"memory\",\n    \"subtopic\": \"ram\",\n    \"type\": \"FACT\",\n    \"claim\": \"Laptop dibekali RAM 16GB.\",\n    \"value\": \"16\",\n    \"unit\": \"GB\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"RAM 16GB\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"storage\",\n    \"subtopic\": \"storage_capacity\",\n    \"type\": \"FACT\",\n    \"claim\": \"Storage yang digunakan adalah SSD NVMe 512GB.\",\n    \"value\": \"512\",\n    \"unit\": \"GB\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Storage yang digunakan adalah SSD NVMe 512GB\"\n  },\n  {\n    \"evidence_id\": \"E004\",\n    \"topic\": \"display\",\n    \"subtopic\": \"refresh_rate\",\n    \"type\": \"FACT\",\n    \"claim\": \"Layar menggunakan panel IPS 144Hz.\",\n    \"value\": \"144\",\n    \"unit\": \"Hz\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Layar menggunakan panel IPS 144Hz\"\n  },\n  {\n    \"evidence_id\": \"E005\",\n    \"topic\": \"display\",\n    \"subtopic\": \"brightness\",\n    \"type\": \"FACT\",\n    \"claim\": \"Tingkat kecerahan puncak layar mencapai 400 nits.\",\n    \"value\": \"400\",\n    \"unit\": \"nits\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"tingkat kecerahan puncak 400 nits\"\n  },\n  {\n    \"evidence_id\": \"E006\",\n    \"topic\": \"design\",\n    \"subtopic\": \"weight\",\n    \"type\": \"FACT\",\n    \"claim\": \"Bobot perangkat berada di kisaran 1,8 kg.\",\n    \"value\": \"1,8\",\n    \"unit\": \"kg\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Bobot perangkat berada di kisaran 1,8 kg\"\n  },\n  {\n    \"evidence_id\": \"E007\",\n    \"topic\": \"design\",\n    \"subtopic\": \"material\",\n    \"type\": \"FACT\",\n    \"claim\": \"Material bodi perangkat menggunakan aluminium.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"material bodi aluminium\"\n  },\n  {\n    \"evidence_id\": \"E008\",\n    \"topic\": \"battery\",\n    \"subtopic\": null,\n    \"type\": \"FACT\",\n    \"claim\": \"Baterai laptop berkapasitas 80Wh.\",\n    \"value\": \"80\",\n    \"unit\": \"Wh\",\n    \"context\": \"pemakaian sehari-hari\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Baterai laptop ini berkapasitas 80Wh\"\n  },\n  {\n    \"evidence_id\": \"E009\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"ultrawide\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai kamera selfie dan ultrawide perlu peningkatan, terutama di kondisi low light.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kondisi low light\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "performance",
+      "subtopic": "chipset",
+      "type": "FACT",
+      "claim": "Laptop dibekali chipset Snapdragon 7 Gen 3.",
+      "value": "Snapdragon 7 Gen 3",
+      "unit": null,
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "chipset Snapdragon 7 Gen 3"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "memory",
+      "subtopic": "ram",
+      "type": "FACT",
+      "claim": "Laptop dibekali RAM 16GB.",
+      "value": "16",
+      "unit": "GB",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "RAM 16GB"
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "storage",
+      "subtopic": "storage_capacity",
+      "type": "FACT",
+      "claim": "Storage yang digunakan adalah SSD NVMe 512GB.",
+      "value": "512",
+      "unit": "GB",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Storage yang digunakan adalah SSD NVMe 512GB"
+    },
+    {
+      "evidence_id": "E004",
+      "topic": "display",
+      "subtopic": "refresh_rate",
+      "type": "FACT",
+      "claim": "Layar menggunakan panel IPS 144Hz.",
+      "value": "144",
+      "unit": "Hz",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Layar menggunakan panel IPS 144Hz"
+    },
+    {
+      "evidence_id": "E005",
+      "topic": "display",
+      "subtopic": "brightness",
+      "type": "FACT",
+      "claim": "Tingkat kecerahan puncak layar mencapai 400 nits.",
+      "value": "400",
+      "unit": "nits",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "tingkat kecerahan puncak 400 nits"
+    },
+    {
+      "evidence_id": "E006",
+      "topic": "design",
+      "subtopic": "weight",
+      "type": "FACT",
+      "claim": "Bobot perangkat berada di kisaran 1,8 kg.",
+      "value": "1,8",
+      "unit": "kg",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Bobot perangkat berada di kisaran 1,8 kg"
+    },
+    {
+      "evidence_id": "E007",
+      "topic": "design",
+      "subtopic": "material",
+      "type": "FACT",
+      "claim": "Material bodi perangkat menggunakan aluminium.",
+      "value": null,
+      "unit": null,
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "material bodi aluminium"
+    },
+    {
+      "evidence_id": "E008",
+      "topic": "battery",
+      "subtopic": null,
+      "type": "FACT",
+      "claim": "Baterai laptop berkapasitas 80Wh.",
+      "value": "80",
+      "unit": "Wh",
+      "context": "pemakaian sehari-hari",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Baterai laptop ini berkapasitas 80Wh"
+    },
+    {
+      "evidence_id": "E009",
+      "topic": "camera",
+      "subtopic": "ultrawide",
+      "type": "OPINION",
+      "claim": "Reviewer menilai kamera selfie dan ultrawide perlu peningkatan, terutama di kondisi low light.",
+      "value": null,
+      "unit": null,
+      "context": "kondisi low light",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "violations": [],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "shared_predicate_ownership",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      }
+    ]
+  }
+}

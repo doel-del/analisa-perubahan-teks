@@ -1,0 +1,70 @@
+{
+  "case_id": "REG-001B",
+  "failure_type": "PARAPHRASED_EXCERPT",
+  "fixture": "failure-reg-004.txt",
+  "model": "gemini-3.5-flash-lite",
+  "prompt_version": "v4.3",
+  "temperature": 0.1,
+  "timestamp": "2026-08-17T14:50:33.933Z",
+  "chunkText": "Segment 323:\r\nSekarang kita beralih ke malam hari.\r\n\r\nSegment 324:\r\nDi sini kualitas video dari kamera selfie-nya sudah mulai menurun.\r\n\r\nSegment 325:\r\nDetail berkurang dan noise di video juga sudah mulai muncul.\r\n\r\nSegment 326:\r\nJadi kalau mau hasil video yang lebih baik, harus cari sumber cahaya yang mencukupi.\r\n\r\nSegment 327:\r\nLanjut ke kamera utama, di sini hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik.\r\n\r\nSegment 328:\r\nBahkan di 4K 30 fps, videonya masih terlihat stabil dan minim jitter.",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Kualitas video dari kamera selfie pada malam hari sudah mulai menurun.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"penggunaan kamera selfie di malam hari\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kualitas video dari kamera selfie-nya sudah mulai menurun\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Detail video kamera selfie berkurang dan noise sudah mulai muncul.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"penggunaan kamera selfie di malam hari\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Detail berkurang dan noise di video juga sudah mulai muncul\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"main_camera\",\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Hasil video kamera utama terlihat lebih minim noise dan detailnya tetap terjaga dengan baik.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"penggunaan kamera utama di malam hari\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"positive\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik\"\n  },\n  {\n    \"evidence_id\": \"E004\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"main_camera\",\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Video kamera utama pada resolusi 4K 30 fps masih terlihat stabil dan minim jitter.\",\n    \"value\": \"4K 30 fps\",\n    \"unit\": null,\n    \"context\": \"perekaman video kamera utama\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"positive\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"di 4K 30 fps, videonya masih terlihat stabil dan minim jitter\"\n  }\n]",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "OBSERVATION",
+      "claim": "Kualitas video dari kamera selfie pada malam hari sudah mulai menurun.",
+      "value": null,
+      "unit": null,
+      "context": "penggunaan kamera selfie di malam hari",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "kualitas video dari kamera selfie-nya sudah mulai menurun"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "OBSERVATION",
+      "claim": "Detail video kamera selfie berkurang dan noise sudah mulai muncul.",
+      "value": null,
+      "unit": null,
+      "context": "penggunaan kamera selfie di malam hari",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Detail berkurang dan noise di video juga sudah mulai muncul"
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "camera",
+      "subtopic": "main_camera",
+      "type": "OBSERVATION",
+      "claim": "Hasil video kamera utama terlihat lebih minim noise dan detailnya tetap terjaga dengan baik.",
+      "value": null,
+      "unit": null,
+      "context": "penggunaan kamera utama di malam hari",
+      "comparison_target": null,
+      "reviewer_assessment": "positive",
+      "certainty": "explicit",
+      "source_excerpt": "hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik"
+    },
+    {
+      "evidence_id": "E004",
+      "topic": "camera",
+      "subtopic": "main_camera",
+      "type": "OBSERVATION",
+      "claim": "Video kamera utama pada resolusi 4K 30 fps masih terlihat stabil dan minim jitter.",
+      "value": "4K 30 fps",
+      "unit": null,
+      "context": "perekaman video kamera utama",
+      "comparison_target": null,
+      "reviewer_assessment": "positive",
+      "certainty": "explicit",
+      "source_excerpt": "di 4K 30 fps, videonya masih terlihat stabil dan minim jitter"
+    }
+  ],
+  "errors": []
+}

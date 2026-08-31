@@ -1,0 +1,62 @@
+{
+  "case_id": "EXP-B2",
+  "run": 2,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T03:05:32.806Z",
+  "chunkText": "1\n00:00:00,000 --> 00:00:04,500\nSuhu perangkat saat gaming mencapai 38°C, sedangkan suhu perangkat saat charging mencapai 45°C.",
+  "chunk_sha256": "532521ac6fcb12e8e636f92c3f8915ec1b35ef63d1e6386bf3e09cc2a71243e8",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"performance\",\n    \"subtopic\": \"temperature\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"Suhu perangkat saat gaming mencapai 38°C.\",\n    \"value\": \"38\",\n    \"unit\": \"°C\",\n    \"context\": \"saat gaming\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Suhu perangkat saat gaming mencapai 38°C\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"charging\",\n    \"subtopic\": \"temperature\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"Suhu perangkat saat charging mencapai 45°C.\",\n    \"value\": \"45\",\n    \"unit\": \"°C\",\n    \"context\": \"saat charging\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"suhu perangkat saat charging mencapai 45°C\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "performance",
+      "subtopic": "temperature",
+      "type": "MEASUREMENT",
+      "claim": "Suhu perangkat saat gaming mencapai 38°C.",
+      "value": "38",
+      "unit": "°C",
+      "context": "saat gaming",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Suhu perangkat saat gaming mencapai 38°C"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "charging",
+      "subtopic": "temperature",
+      "type": "MEASUREMENT",
+      "claim": "Suhu perangkat saat charging mencapai 45°C.",
+      "value": "45",
+      "unit": "°C",
+      "context": "saat charging",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "suhu perangkat saat charging mencapai 45°C"
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "violations": [],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "required_properties",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      }
+    ]
+  }
+}

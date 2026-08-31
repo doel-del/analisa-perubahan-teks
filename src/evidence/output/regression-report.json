@@ -1,0 +1,392 @@
+{
+  "generated_at": "2026-08-17T16:17:33.292Z",
+  "summary": {
+    "total_cases": 6,
+    "total_replays": 18,
+    "pass_count": 13,
+    "fail_count": 3,
+    "inconclusive_count": 2
+  },
+  "results": [
+    {
+      "case_id": "REG-001A",
+      "replay": 1,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-001A",
+      "replay": 2,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-001A",
+      "replay": 3,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-001B",
+      "replay": 1,
+      "status": "FAIL",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "FAIL",
+          "violations": [
+            "NON_LITERAL_EXCERPT: \"kualitas video dari kamera selfie-nya sudah mulai menurun. Detail berkurang dan noise di video juga sudah mulai muncul\""
+          ],
+          "unavailable": []
+        }
+      ],
+      "violations": [
+        "NON_LITERAL_EXCERPT: \"kualitas video dari kamera selfie-nya sudah mulai menurun. Detail berkurang dan noise di video juga sudah mulai muncul\""
+      ]
+    },
+    {
+      "case_id": "REG-001B",
+      "replay": 2,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-001B",
+      "replay": 3,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-001C",
+      "replay": 1,
+      "status": "FAIL",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "FAIL",
+          "violations": [
+            "NON_LITERAL_EXCERPT: \"kamera smartphone ini bisa kami katakan sudah sangat mumpuni\ndan bisa diandalkan untuk digunakan sehari-hari\""
+          ],
+          "unavailable": []
+        }
+      ],
+      "violations": [
+        "NON_LITERAL_EXCERPT: \"kamera smartphone ini bisa kami katakan sudah sangat mumpuni\ndan bisa diandalkan untuk digunakan sehari-hari\""
+      ]
+    },
+    {
+      "case_id": "REG-001C",
+      "replay": 2,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-001C",
+      "replay": 3,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "excerpt_must_be_literal",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-002",
+      "replay": 1,
+      "status": "FAIL",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "FAIL",
+          "violations": [
+            "MISSING_REQUIRED_PROPOSITION: kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+          ],
+          "unavailable": []
+        },
+        {
+          "invariant": "forbidden_combinations",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": [
+        "MISSING_REQUIRED_PROPOSITION: kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+      ]
+    },
+    {
+      "case_id": "REG-002",
+      "replay": 2,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "forbidden_combinations",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-002",
+      "replay": 3,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "forbidden_combinations",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-003",
+      "replay": 1,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_properties",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "no_compound_value",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-003",
+      "replay": 2,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_properties",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "no_compound_value",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-003",
+      "replay": 3,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_properties",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "no_compound_value",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-004",
+      "replay": 1,
+      "status": "INCONCLUSIVE",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "INCONCLUSIVE",
+          "violations": [],
+          "unavailable": [
+            "EVIDENCE_LIST_EMPTY"
+          ]
+        },
+        {
+          "invariant": "source_boundary",
+          "status": "INCONCLUSIVE",
+          "violations": [],
+          "unavailable": [
+            "EVIDENCE_LIST_EMPTY"
+          ]
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-004",
+      "replay": 2,
+      "status": "PASS",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        },
+        {
+          "invariant": "source_boundary",
+          "status": "PASS",
+          "violations": [],
+          "unavailable": []
+        }
+      ],
+      "violations": []
+    },
+    {
+      "case_id": "REG-004",
+      "replay": 3,
+      "status": "INCONCLUSIVE",
+      "invariants": [
+        {
+          "invariant": "required_propositions",
+          "status": "INCONCLUSIVE",
+          "violations": [],
+          "unavailable": [
+            "EVIDENCE_LIST_EMPTY"
+          ]
+        },
+        {
+          "invariant": "source_boundary",
+          "status": "INCONCLUSIVE",
+          "violations": [],
+          "unavailable": [
+            "EVIDENCE_LIST_EMPTY"
+          ]
+        }
+      ],
+      "violations": []
+    }
+  ]
+}

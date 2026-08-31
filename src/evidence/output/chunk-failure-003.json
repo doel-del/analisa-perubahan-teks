@@ -1,0 +1,40 @@
+{
+  "fixture": "chunk-failure-003.txt",
+  "model": "gemini-3.5-flash-lite",
+  "prompt_version": "v4.2",
+  "generation_config": {
+    "temperature": 0.1
+  },
+  "timestamp": "2026-08-16T02:53:55.592Z",
+  "chunkText": "Segment 327:\r\nhasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik\r\n\r\nSegment 328:\r\nBahkan di 4K 30 fps, videonya masih terlihat stabil dan minim jitter",
+  "rawOutput": "[\n  {\n    \"topic\": \"camera\",\n    \"subtopic\": \"main_camera\",\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"perekaman video\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik\"\n  },\n  {\n    \"topic\": \"camera\",\n    \"subtopic\": \"main_camera\",\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Video pada resolusi 4K 30 fps masih terlihat stabil dan minim jitter.\",\n    \"value\": \"4K 30 fps\",\n    \"unit\": null,\n    \"context\": \"perekaman video\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Bahkan di 4K 30 fps, videonya masih terlihat stabil dan minim jitter\"\n  }\n]",
+  "parsedEvidence": [
+    {
+      "topic": "camera",
+      "subtopic": "main_camera",
+      "type": "OBSERVATION",
+      "claim": "Hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik.",
+      "value": null,
+      "unit": null,
+      "context": "perekaman video",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik"
+    },
+    {
+      "topic": "camera",
+      "subtopic": "main_camera",
+      "type": "OBSERVATION",
+      "claim": "Video pada resolusi 4K 30 fps masih terlihat stabil dan minim jitter.",
+      "value": "4K 30 fps",
+      "unit": null,
+      "context": "perekaman video",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Bahkan di 4K 30 fps, videonya masih terlihat stabil dan minim jitter"
+    }
+  ],
+  "errors": []
+}

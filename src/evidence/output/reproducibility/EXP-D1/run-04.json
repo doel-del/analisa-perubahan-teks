@@ -1,0 +1,66 @@
+{
+  "case_id": "EXP-D1",
+  "run": 4,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T06:12:31.198Z",
+  "chunkText": "1\n00:00:00,000 --> 00:00:04,500\nKetika cahaya minim, kualitas kamera selfie maupun ultrawide keduanya sama-sama masih terasa kurang maksimal.",
+  "chunk_sha256": "ad3e7569ec4d97427372991a434b6e39473035831305a2bfdbde80a7b5a95017",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai kualitas kamera selfie saat cahaya minim kurang maksimal.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"cahaya minim\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kualitas kamera selfie maupun ultrawide keduanya sama-sama masih terasa kurang maksimal\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"ultrawide\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai kualitas kamera ultrawide saat cahaya minim kurang maksimal.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"cahaya minim\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kualitas kamera selfie maupun ultrawide keduanya sama-sama masih terasa kurang maksimal\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "OPINION",
+      "claim": "Reviewer menilai kualitas kamera selfie saat cahaya minim kurang maksimal.",
+      "value": null,
+      "unit": null,
+      "context": "cahaya minim",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kualitas kamera selfie maupun ultrawide keduanya sama-sama masih terasa kurang maksimal"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "camera",
+      "subtopic": "ultrawide",
+      "type": "OPINION",
+      "claim": "Reviewer menilai kualitas kamera ultrawide saat cahaya minim kurang maksimal.",
+      "value": null,
+      "unit": null,
+      "context": "cahaya minim",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kualitas kamera selfie maupun ultrawide keduanya sama-sama masih terasa kurang maksimal"
+    }
+  ],
+  "validation": {
+    "status": "FAIL",
+    "violations": [
+      "SHARED_PREDICATE_DUPLICATE_SPLIT: subjects=\"kamera selfie + ultrawide\", 2 evidence masing-masing memuat seluruh subjek (proposisi disalin ke lebih dari satu evidence)"
+    ],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "shared_predicate_ownership",
+        "status": "FAIL",
+        "violations": [
+          "SHARED_PREDICATE_DUPLICATE_SPLIT: subjects=\"kamera selfie + ultrawide\", 2 evidence masing-masing memuat seluruh subjek (proposisi disalin ke lebih dari satu evidence)"
+        ],
+        "unavailable": []
+      }
+    ]
+  }
+}

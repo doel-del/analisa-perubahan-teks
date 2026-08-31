@@ -1,0 +1,56 @@
+{
+  "case_id": "REG-001A",
+  "failure_type": "PARAPHRASED_EXCERPT",
+  "fixture": "failure-reg-001.txt",
+  "model": "gemini-3.5-flash-lite",
+  "prompt_version": "v4.3",
+  "temperature": 0.1,
+  "timestamp": "2026-08-17T14:50:13.912Z",
+  "chunkText": "Segment 110:\r\nKalau ada yang takut bahwa ini akan kepanasan, oh tenang, cooling system-nya juga ini baru,\r\n\r\nSegment 111:\r\n3,7 kali lebih luas dibandingkan Galaxy A25—ini sudah bukan berapa persen, sudah berapa kali lebih luas!\r\n\r\nSegment 112:\r\nIni adalah cooling system berupa Layer Stack Graphite\r\n\r\nSegment 113:\r\nyang luasnya adalah 2.396 mm persegi.\r\n\r\nSegment 114:\r\nJadi harusnya ini bisa mengendalikan suhu dengan baik.",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"performance\",\n    \"subtopic\": null,\n    \"type\": \"COMPARISON\",\n    \"claim\": \"Cooling system 3,7 kali lebih luas dibandingkan Galaxy A25.\",\n    \"value\": \"3,7\",\n    \"unit\": \"kali\",\n    \"context\": \"cooling system\",\n    \"comparison_target\": \"Galaxy A25\",\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"3,7 kali lebih luas dibandingkan Galaxy A25\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"performance\",\n    \"subtopic\": null,\n    \"type\": \"FACT\",\n    \"claim\": \"Cooling system menggunakan jenis Layer Stack Graphite.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"cooling system\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"cooling system berupa Layer Stack Graphite\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"performance\",\n    \"subtopic\": null,\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"Luas cooling system adalah 2.396 mm persegi.\",\n    \"value\": \"2.396\",\n    \"unit\": \"mm persegi\",\n    \"context\": \"cooling system\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"luasnya adalah 2.396 mm persegi\"\n  }\n]",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "performance",
+      "subtopic": null,
+      "type": "COMPARISON",
+      "claim": "Cooling system 3,7 kali lebih luas dibandingkan Galaxy A25.",
+      "value": "3,7",
+      "unit": "kali",
+      "context": "cooling system",
+      "comparison_target": "Galaxy A25",
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "3,7 kali lebih luas dibandingkan Galaxy A25"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "performance",
+      "subtopic": null,
+      "type": "FACT",
+      "claim": "Cooling system menggunakan jenis Layer Stack Graphite.",
+      "value": null,
+      "unit": null,
+      "context": "cooling system",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "cooling system berupa Layer Stack Graphite"
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "performance",
+      "subtopic": null,
+      "type": "MEASUREMENT",
+      "claim": "Luas cooling system adalah 2.396 mm persegi.",
+      "value": "2.396",
+      "unit": "mm persegi",
+      "context": "cooling system",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "luasnya adalah 2.396 mm persegi"
+    }
+  ],
+  "errors": []
+}

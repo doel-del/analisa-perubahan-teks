@@ -1,0 +1,28 @@
+{
+  "case_id": "REG-004",
+  "failure_type": "CROSS_CHUNK_EXCERPT",
+  "fixture": "failure-reg-005.txt",
+  "model": "gemini-3.5-flash-lite",
+  "prompt_version": "v4.3",
+  "temperature": 0.1,
+  "timestamp": "2026-08-17T14:51:03.130Z",
+  "chunkText": "Segment 236:\r\nLanjut untuk Free Fire.\r\n\r\nSegment 237:\r\nKarena Galaxy A26 5G ini merupakan official partner Free Fire dalam ajang Free Fire Nusantara Series 2025,\r\n\r\nSegment 238:\r\njadi sekarang saja kita tes gaming di smartphone yang satu ini.",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"gaming\",\n    \"subtopic\": null,\n    \"type\": \"FACT\",\n    \"claim\": \"Galaxy A26 5G merupakan official partner Free Fire dalam ajang Free Fire Nusantara Series 2025.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"pengujian game Free Fire\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Galaxy A26 5G ini merupakan official partner Free Fire dalam ajang Free Fire Nusantara Series 2025\"\n  }\n]",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "gaming",
+      "subtopic": null,
+      "type": "FACT",
+      "claim": "Galaxy A26 5G merupakan official partner Free Fire dalam ajang Free Fire Nusantara Series 2025.",
+      "value": null,
+      "unit": null,
+      "context": "pengujian game Free Fire",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Galaxy A26 5G ini merupakan official partner Free Fire dalam ajang Free Fire Nusantara Series 2025"
+    }
+  ],
+  "errors": []
+}

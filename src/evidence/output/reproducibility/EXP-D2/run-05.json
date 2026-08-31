@@ -1,0 +1,66 @@
+{
+  "case_id": "EXP-D2",
+  "run": 5,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T06:12:44.723Z",
+  "chunkText": "1\n00:00:00,000 --> 00:00:05,000\nBaik kamera selfie maupun kamera ultrawide, hasil bidikan malam hari masih perlu dibenahi dan belum cukup tajam.",
+  "chunk_sha256": "6c59fc376588ed69b2c95d8c46a99ba3f21f7f06bc9b334c6d2cc49bd0d90d03",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai hasil bidikan malam hari kamera selfie masih perlu dibenahi dan belum cukup tajam.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"penggunaan kamera selfie di malam hari\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera selfie maupun kamera ultrawide, hasil bidikan malam hari masih perlu dibenahi dan belum cukup tajam\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"ultrawide\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Reviewer menilai hasil bidikan malam hari kamera ultrawide masih perlu dibenahi dan belum cukup tajam.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"penggunaan kamera ultrawide di malam hari\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera selfie maupun kamera ultrawide, hasil bidikan malam hari masih perlu dibenahi dan belum cukup tajam\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "OPINION",
+      "claim": "Reviewer menilai hasil bidikan malam hari kamera selfie masih perlu dibenahi dan belum cukup tajam.",
+      "value": null,
+      "unit": null,
+      "context": "penggunaan kamera selfie di malam hari",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kamera selfie maupun kamera ultrawide, hasil bidikan malam hari masih perlu dibenahi dan belum cukup tajam"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "camera",
+      "subtopic": "ultrawide",
+      "type": "OPINION",
+      "claim": "Reviewer menilai hasil bidikan malam hari kamera ultrawide masih perlu dibenahi dan belum cukup tajam.",
+      "value": null,
+      "unit": null,
+      "context": "penggunaan kamera ultrawide di malam hari",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kamera selfie maupun kamera ultrawide, hasil bidikan malam hari masih perlu dibenahi dan belum cukup tajam"
+    }
+  ],
+  "validation": {
+    "status": "FAIL",
+    "violations": [
+      "SHARED_PREDICATE_DUPLICATE_SPLIT: subjects=\"kamera selfie + ultrawide\", 2 evidence masing-masing memuat seluruh subjek (proposisi disalin ke lebih dari satu evidence)"
+    ],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "shared_predicate_ownership",
+        "status": "FAIL",
+        "violations": [
+          "SHARED_PREDICATE_DUPLICATE_SPLIT: subjects=\"kamera selfie + ultrawide\", 2 evidence masing-masing memuat seluruh subjek (proposisi disalin ke lebih dari satu evidence)"
+        ],
+        "unavailable": []
+      }
+    ]
+  }
+}

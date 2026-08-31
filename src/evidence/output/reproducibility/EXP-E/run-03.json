@@ -1,0 +1,66 @@
+{
+  "case_id": "EXP-E",
+  "run": 3,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T06:32:07.184Z",
+  "chunkText": "1\n00:00:00,000 --> 00:00:03,500\nSekarang membahas sektor kamera secara umum.\n\n2\n00:00:03,500 --> 00:00:08,000\nkamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light.",
+  "chunk_sha256": "6f3cd6edc09378e923c9c377f392fd9cefdbf570a164872281ff572c74f48ff6",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Kamera selfie perlu peningkatan, terutama di kondisi low light.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kondisi low light\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"ultrawide\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Kamera ultrawide perlu peningkatan, terutama di kondisi low light.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kondisi low light\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "OPINION",
+      "claim": "Kamera selfie perlu peningkatan, terutama di kondisi low light.",
+      "value": null,
+      "unit": null,
+      "context": "kondisi low light",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "camera",
+      "subtopic": "ultrawide",
+      "type": "OPINION",
+      "claim": "Kamera ultrawide perlu peningkatan, terutama di kondisi low light.",
+      "value": null,
+      "unit": null,
+      "context": "kondisi low light",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+    }
+  ],
+  "validation": {
+    "status": "FAIL",
+    "violations": [
+      "SHARED_PREDICATE_DUPLICATE_SPLIT: subjects=\"kamera selfie + ultrawide\", 2 evidence masing-masing memuat seluruh subjek (proposisi disalin ke lebih dari satu evidence)"
+    ],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "shared_predicate_ownership",
+        "status": "FAIL",
+        "violations": [
+          "SHARED_PREDICATE_DUPLICATE_SPLIT: subjects=\"kamera selfie + ultrawide\", 2 evidence masing-masing memuat seluruh subjek (proposisi disalin ke lebih dari satu evidence)"
+        ],
+        "unavailable": []
+      }
+    ]
+  }
+}

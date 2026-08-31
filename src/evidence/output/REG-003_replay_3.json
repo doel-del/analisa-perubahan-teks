@@ -1,0 +1,56 @@
+{
+  "case_id": "REG-003",
+  "failure_type": "COMPOUND_VALUE",
+  "fixture": "failure-reg-003.txt",
+  "model": "gemini-3.5-flash-lite",
+  "prompt_version": "v4.3",
+  "temperature": 0.1,
+  "timestamp": "2026-08-17T14:51:00.110Z",
+  "chunkText": "Segment 413:\r\nUntuk harganya, di sini cuma ada satu varian\r\n\r\nSegment 414:\r\nuntuk Samsung Galaxy A26 5G, yaitu yang RAM-nya 8 GB dengan storage 256 GB,\r\n\r\nSegment 415:\r\ndan ini dijual di harga kisaran Rp3.999.000.",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"price\",\n    \"subtopic\": \"ram\",\n    \"type\": \"FACT\",\n    \"claim\": \"Samsung Galaxy A26 5G memiliki RAM 8 GB.\",\n    \"value\": \"8\",\n    \"unit\": \"GB\",\n    \"context\": \"varian RAM Samsung Galaxy A26 5G\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"RAM-nya 8 GB\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"price\",\n    \"subtopic\": \"storage_capacity\",\n    \"type\": \"FACT\",\n    \"claim\": \"Samsung Galaxy A26 5G memiliki storage 256 GB.\",\n    \"value\": \"256\",\n    \"unit\": \"GB\",\n    \"context\": \"varian storage Samsung Galaxy A26 5G\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"storage 256 GB\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"price\",\n    \"subtopic\": \"price\",\n    \"type\": \"FACT\",\n    \"claim\": \"Harga Samsung Galaxy A26 5G berada di kisaran Rp3.999.000.\",\n    \"value\": \"3.999.000\",\n    \"unit\": \"IDR\",\n    \"context\": \"harga penjualan Samsung Galaxy A26 5G\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"dijual di harga kisaran Rp3.999.000\"\n  }\n]",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "price",
+      "subtopic": "ram",
+      "type": "FACT",
+      "claim": "Samsung Galaxy A26 5G memiliki RAM 8 GB.",
+      "value": "8",
+      "unit": "GB",
+      "context": "varian RAM Samsung Galaxy A26 5G",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "RAM-nya 8 GB"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "price",
+      "subtopic": "storage_capacity",
+      "type": "FACT",
+      "claim": "Samsung Galaxy A26 5G memiliki storage 256 GB.",
+      "value": "256",
+      "unit": "GB",
+      "context": "varian storage Samsung Galaxy A26 5G",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "storage 256 GB"
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "price",
+      "subtopic": "price",
+      "type": "FACT",
+      "claim": "Harga Samsung Galaxy A26 5G berada di kisaran Rp3.999.000.",
+      "value": "3.999.000",
+      "unit": "IDR",
+      "context": "harga penjualan Samsung Galaxy A26 5G",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "dijual di harga kisaran Rp3.999.000"
+    }
+  ],
+  "errors": []
+}

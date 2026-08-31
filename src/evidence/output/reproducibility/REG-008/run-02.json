@@ -1,0 +1,146 @@
+{
+  "case_id": "REG-008",
+  "run": 2,
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.1,
+  "timestamp": "2026-08-28T03:02:09.068Z",
+  "chunkText": "1\n00:00:01,000 --> 00:00:06,000\nSpeaker kiri dan speaker kanan pada laptop ini sama-sama terdengar pecah saat volume dinaikkan penuh.\n\n2\n00:00:06,500 --> 00:00:12,000\nUntuk spesifikasi, laptop ini dibekali RAM 16GB dan storage SSD 512GB.\n\n3\n00:00:12,500 --> 00:00:18,000\nTombol volume atas dan tombol volume bawah terasa agak keras ditekan, mungkin karena unit ini masih baru.\n\n4\n00:00:18,500 --> 00:00:24,000\nBaterai laptop ini bertahan sekitar 6 jam pemakaian normal, dan pengisian daya dari 0 ke 100 persen memakan waktu sekitar 2 jam.\n\n5\n00:00:24,500 --> 00:00:31,000\nWarna hasil foto siang dan warna hasil foto malam pada kamera utama ini sama-sama terlihat agak oversaturated dibanding warna aslinya.\n\n6\n00:00:31,500 --> 00:00:38,000\nKamera selfie dan ultrawide pada perangkat ini perlu peningkatan, terutama di kondisi low light.",
+  "chunk_sha256": "1462ea30475733a6d3d574fd7f2d2d80ab874112d875d00c249d5e239ffbd119",
+  "prompt_sha256": "82aae0d9f0d602bf6d43d03099fcc80a907ae0a4cf34d3239c8d12a7ea837b23",
+  "system_instruction_sha256": "78be461dab33a8a9c98f7e529670e60a970bdb4c8118909527c0e0b9d9f8bbe3",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"audio\",\n    \"subtopic\": \"speaker\",\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Speaker kiri dan kanan terdengar pecah saat volume dinaikkan penuh.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"volume dinaikkan penuh\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Speaker kiri dan speaker kanan pada laptop ini sama-sama terdengar pecah saat volume dinaikkan penuh\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"memory\",\n    \"subtopic\": \"ram\",\n    \"type\": \"FACT\",\n    \"claim\": \"Laptop dibekali RAM 16GB.\",\n    \"value\": \"16\",\n    \"unit\": \"GB\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"RAM 16GB\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"storage\",\n    \"subtopic\": \"storage_capacity\",\n    \"type\": \"FACT\",\n    \"claim\": \"Laptop dibekali storage SSD 512GB.\",\n    \"value\": \"512\",\n    \"unit\": \"GB\",\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"storage SSD 512GB\"\n  },\n  {\n    \"evidence_id\": \"E004\",\n    \"topic\": \"usability\",\n    \"subtopic\": null,\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Tombol volume atas dan bawah terasa agak keras ditekan.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": null,\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Tombol volume atas dan tombol volume bawah terasa agak keras ditekan\"\n  },\n  {\n    \"evidence_id\": \"E005\",\n    \"topic\": \"battery\",\n    \"subtopic\": \"battery_test\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"Baterai laptop bertahan sekitar 6 jam pemakaian normal.\",\n    \"value\": \"6\",\n    \"unit\": \"jam\",\n    \"context\": \"pemakaian normal\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Baterai laptop ini bertahan sekitar 6 jam pemakaian normal\"\n  },\n  {\n    \"evidence_id\": \"E006\",\n    \"topic\": \"charging\",\n    \"subtopic\": \"charging_speed\",\n    \"type\": \"MEASUREMENT\",\n    \"claim\": \"Pengisian daya dari 0 ke 100 persen memakan waktu sekitar 2 jam.\",\n    \"value\": \"2\",\n    \"unit\": \"jam\",\n    \"context\": \"pengisian daya dari 0 ke 100 persen\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"pengisian daya dari 0 ke 100 persen memakan waktu sekitar 2 jam\"\n  },\n  {\n    \"evidence_id\": \"E007\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"main_camera\",\n    \"type\": \"OBSERVATION\",\n    \"claim\": \"Warna hasil foto siang dan malam pada kamera utama sama-sama terlihat agak oversaturated dibanding warna aslinya.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"foto siang dan foto malam pada kamera utama\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Warna hasil foto siang dan warna hasil foto malam pada kamera utama ini sama-sama terlihat agak oversaturated dibanding warna aslinya\"\n  },\n  {\n    \"evidence_id\": \"E008\",\n    \"topic\": \"camera\",\n    \"subtopic\": null,\n    \"type\": \"OPINION\",\n    \"claim\": \"Kamera selfie dan ultrawide perlu peningkatan, terutama di kondisi low light.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kondisi low light\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"Kamera selfie dan ultrawide pada perangkat ini perlu peningkatan, terutama di kondisi low light\"\n  }\n]",
+  "parseStatus": "SUCCESS",
+  "parseStrategy": "direct_array",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "audio",
+      "subtopic": "speaker",
+      "type": "OBSERVATION",
+      "claim": "Speaker kiri dan kanan terdengar pecah saat volume dinaikkan penuh.",
+      "value": null,
+      "unit": null,
+      "context": "volume dinaikkan penuh",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Speaker kiri dan speaker kanan pada laptop ini sama-sama terdengar pecah saat volume dinaikkan penuh"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "memory",
+      "subtopic": "ram",
+      "type": "FACT",
+      "claim": "Laptop dibekali RAM 16GB.",
+      "value": "16",
+      "unit": "GB",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "RAM 16GB"
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "storage",
+      "subtopic": "storage_capacity",
+      "type": "FACT",
+      "claim": "Laptop dibekali storage SSD 512GB.",
+      "value": "512",
+      "unit": "GB",
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "storage SSD 512GB"
+    },
+    {
+      "evidence_id": "E004",
+      "topic": "usability",
+      "subtopic": null,
+      "type": "OBSERVATION",
+      "claim": "Tombol volume atas dan bawah terasa agak keras ditekan.",
+      "value": null,
+      "unit": null,
+      "context": null,
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Tombol volume atas dan tombol volume bawah terasa agak keras ditekan"
+    },
+    {
+      "evidence_id": "E005",
+      "topic": "battery",
+      "subtopic": "battery_test",
+      "type": "MEASUREMENT",
+      "claim": "Baterai laptop bertahan sekitar 6 jam pemakaian normal.",
+      "value": "6",
+      "unit": "jam",
+      "context": "pemakaian normal",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Baterai laptop ini bertahan sekitar 6 jam pemakaian normal"
+    },
+    {
+      "evidence_id": "E006",
+      "topic": "charging",
+      "subtopic": "charging_speed",
+      "type": "MEASUREMENT",
+      "claim": "Pengisian daya dari 0 ke 100 persen memakan waktu sekitar 2 jam.",
+      "value": "2",
+      "unit": "jam",
+      "context": "pengisian daya dari 0 ke 100 persen",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "pengisian daya dari 0 ke 100 persen memakan waktu sekitar 2 jam"
+    },
+    {
+      "evidence_id": "E007",
+      "topic": "camera",
+      "subtopic": "main_camera",
+      "type": "OBSERVATION",
+      "claim": "Warna hasil foto siang dan malam pada kamera utama sama-sama terlihat agak oversaturated dibanding warna aslinya.",
+      "value": null,
+      "unit": null,
+      "context": "foto siang dan foto malam pada kamera utama",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "Warna hasil foto siang dan warna hasil foto malam pada kamera utama ini sama-sama terlihat agak oversaturated dibanding warna aslinya"
+    },
+    {
+      "evidence_id": "E008",
+      "topic": "camera",
+      "subtopic": null,
+      "type": "OPINION",
+      "claim": "Kamera selfie dan ultrawide perlu peningkatan, terutama di kondisi low light.",
+      "value": null,
+      "unit": null,
+      "context": "kondisi low light",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "Kamera selfie dan ultrawide pada perangkat ini perlu peningkatan, terutama di kondisi low light"
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "violations": [],
+    "invariant_results": [
+      {
+        "invariant": "excerpt_must_be_literal",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      },
+      {
+        "invariant": "shared_predicate_ownership",
+        "status": "PASS",
+        "violations": [],
+        "unavailable": []
+      }
+    ]
+  }
+}

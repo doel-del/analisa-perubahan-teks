@@ -1,0 +1,56 @@
+{
+  "case_id": "REG-002",
+  "failure_type": "FACT_ASSESSMENT",
+  "fixture": "failure-reg-002.txt",
+  "model": "gemini-3.5-flash-lite",
+  "prompt_version": "v4.3",
+  "temperature": 0.1,
+  "timestamp": "2026-08-17T14:50:54.038Z",
+  "chunkText": "Segment 357:\r\nKalau ditanya apa yang kurang bagi kami?\r\n\r\nSegment 358:\r\nYang pertama itu tidak ada opsi perekaman 60 fps di kamera selfie-nya.\r\n\r\nSegment 359:\r\nKemudian kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light.",
+  "rawOutput": "[\n  {\n    \"evidence_id\": \"E001\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"FACT\",\n    \"claim\": \"Tidak ada opsi perekaman 60 fps di kamera selfie.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kamera selfie\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": null,\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"tidak ada opsi perekaman 60 fps di kamera selfie-nya\"\n  },\n  {\n    \"evidence_id\": \"E002\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"selfie\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Kamera selfie perlu peningkatan, terutama di kondisi low light.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kondisi low light\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light\"\n  },\n  {\n    \"evidence_id\": \"E003\",\n    \"topic\": \"camera\",\n    \"subtopic\": \"ultrawide\",\n    \"type\": \"OPINION\",\n    \"claim\": \"Kamera ultrawide perlu peningkatan, terutama di kondisi low light.\",\n    \"value\": null,\n    \"unit\": null,\n    \"context\": \"kondisi low light\",\n    \"comparison_target\": null,\n    \"reviewer_assessment\": \"negative\",\n    \"certainty\": \"explicit\",\n    \"source_excerpt\": \"kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light\"\n  }\n]",
+  "parsedEvidence": [
+    {
+      "evidence_id": "E001",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "FACT",
+      "claim": "Tidak ada opsi perekaman 60 fps di kamera selfie.",
+      "value": null,
+      "unit": null,
+      "context": "kamera selfie",
+      "comparison_target": null,
+      "reviewer_assessment": null,
+      "certainty": "explicit",
+      "source_excerpt": "tidak ada opsi perekaman 60 fps di kamera selfie-nya"
+    },
+    {
+      "evidence_id": "E002",
+      "topic": "camera",
+      "subtopic": "selfie",
+      "type": "OPINION",
+      "claim": "Kamera selfie perlu peningkatan, terutama di kondisi low light.",
+      "value": null,
+      "unit": null,
+      "context": "kondisi low light",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+    },
+    {
+      "evidence_id": "E003",
+      "topic": "camera",
+      "subtopic": "ultrawide",
+      "type": "OPINION",
+      "claim": "Kamera ultrawide perlu peningkatan, terutama di kondisi low light.",
+      "value": null,
+      "unit": null,
+      "context": "kondisi low light",
+      "comparison_target": null,
+      "reviewer_assessment": "negative",
+      "certainty": "explicit",
+      "source_excerpt": "kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+    }
+  ],
+  "errors": []
+}
