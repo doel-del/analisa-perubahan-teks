@@ -1,0 +1,23 @@
+1
+00:00:01,000 --> 00:00:06,000
+Speaker kiri dan speaker kanan pada laptop ini sama-sama terdengar pecah saat volume dinaikkan penuh.
+
+2
+00:00:06,500 --> 00:00:12,000
+Untuk spesifikasi, laptop ini dibekali RAM 16GB dan storage SSD 512GB.
+
+3
+00:00:12,500 --> 00:00:18,000
+Tombol volume atas dan tombol volume bawah terasa agak keras ditekan, mungkin karena unit ini masih baru.
+
+4
+00:00:18,500 --> 00:00:24,000
+Baterai laptop ini bertahan sekitar 6 jam pemakaian normal, dan pengisian daya dari 0 ke 100 persen memakan waktu sekitar 2 jam.
+
+5
+00:00:24,500 --> 00:00:31,000
+Warna hasil foto siang dan warna hasil foto malam pada kamera utama ini sama-sama terlihat agak oversaturated dibanding warna aslinya.
+
+6
+00:00:31,500 --> 00:00:38,000
+Kamera selfie dan ultrawide pada perangkat ini perlu peningkatan, terutama di kondisi low light.

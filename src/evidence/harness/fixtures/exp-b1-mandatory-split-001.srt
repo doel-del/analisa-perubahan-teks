@@ -1,0 +1,11 @@
+1
+00:00:01,000 --> 00:00:06,000
+Kamera selfie pada perangkat ini beresolusi 12MP, sedangkan kamera ultrawide beresolusi 8MP.
+
+2
+00:00:06,500 --> 00:00:12,000
+FPS rata-rata saat bermain Game A mencapai 60 FPS, sedangkan FPS rata-rata saat bermain Game B hanya 35 FPS.
+
+3
+00:00:12,500 --> 00:00:18,000
+Baterai bertahan sekitar 8 jam untuk pemakaian ringan, sedangkan baterai hanya bertahan sekitar 4 jam untuk pemakaian gaming intensif.

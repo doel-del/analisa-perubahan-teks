@@ -1,0 +1,5 @@
+Segment 327:
+hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik
+
+Segment 328:
+Bahkan di 4K 30 fps, videonya masih terlihat stabil dan minim jitter

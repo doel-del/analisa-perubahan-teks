@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:04,000
+Engsel kiri dan engsel kanan pada laptop ini sama-sama terasa kokoh saat dibuka tutup.
+
+2
+00:00:04,500 --> 00:00:09,000
+Storage yang digunakan adalah SSD NVMe 512GB dengan kecepatan baca tinggi.
+
+3
+00:00:09,500 --> 00:00:14,000
+Port USB-C bagian depan dan port USB-C bagian belakang sama-sama mendukung pengisian daya cepat.
+
+4
+00:00:14,500 --> 00:00:19,000
+Bobot perangkat berada di kisaran 1,8 kg dengan material bodi aluminium.
+
+5
+00:00:19,500 --> 00:00:24,000
+Kipas pendingin kiri dan kipas pendingin kanan sama-sama berputar lebih kencang saat beban tinggi.
+
+6
+00:00:24,500 --> 00:00:29,000
+kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light.

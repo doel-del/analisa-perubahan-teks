@@ -1,0 +1,7 @@
+1
+00:00:00,000 --> 00:00:03,500
+Sekarang membahas sektor kamera secara umum.
+
+2
+00:00:03,500 --> 00:00:08,000
+kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light.

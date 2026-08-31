@@ -1,0 +1,23 @@
+323
+00:18:30,049 --> 00:18:31,670
+Sekarang kita beralih ke malam hari.
+
+324
+00:18:32,529 --> 00:18:35,190
+Di sini kualitas video dari kamera selfie-nya sudah mulai menurun.
+
+325
+00:18:35,849 --> 00:18:38,569
+Detail berkurang dan noise di video juga sudah mulai muncul.
+
+326
+00:18:38,869 --> 00:18:42,210
+Jadi kalau mau hasil video yang lebih baik, harus cari sumber cahaya yang mencukupi.
+
+327
+00:18:42,710 --> 00:18:47,349
+Lanjut ke kamera utama, di sini hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik.
+
+328
+00:18:47,349 --> 00:18:51,990
+Bahkan di 4K 30 fps, videonya masih terlihat stabil dan minim jitter.

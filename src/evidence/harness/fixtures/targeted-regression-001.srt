@@ -1,0 +1,35 @@
+1
+00:00:00,000 --> 00:00:03,800
+Performa gaming smartphone ini merosot setelah bermain lebih dari 30 menit.
+
+2
+00:00:04,200 --> 00:00:07,900
+Suhu perangkat melonjak drastis saat pengisian daya cepat.
+
+3
+00:00:08,300 --> 00:00:12,100
+Persentase baterai perangkat ini menyusut selama pengujian.
+
+4
+00:00:12,500 --> 00:00:16,200
+Menurut saya desain smartphone ini sangat mengecewakan.
+
+5
+00:00:16,600 --> 00:00:20,400
+Reviewer menilai layarnya sangat baik untuk kelas harga ini.
+
+6
+00:00:20,800 --> 00:00:25,600
+Sayangnya kualitas kamera menurun drastis dan ini sangat mengecewakan bagi kami.
+
+7
+00:00:26,000 --> 00:00:30,200
+Skor benchmark AnTuTu terdongkrak setelah update software.
+
+8
+00:00:30,600 --> 00:00:34,900
+Sinyal jaringan tetap stabil selama pengujian di dalam ruangan.
+
+9
+00:00:35,200 --> 00:00:38,800
+Kualitas speaker smartphone ini tetap terjaga dengan baik selama pengujian audio.

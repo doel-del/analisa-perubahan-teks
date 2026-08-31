@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:04,500
+Suhu perangkat saat gaming dan saat charging sama-sama 40°C.
+
+2
+00:00:05,000 --> 00:00:09,500
+Suhu perangkat di dekat kamera dan di area layar sama-sama 40°C.
+
+3
+00:00:10,000 --> 00:00:15,000
+Kelembapan ruangan saat pengujian pagi tercatat 60 persen.
+
+4
+00:00:15,500 --> 00:00:20,500
+Suhu perangkat saat gaming mencapai 38°C, sedangkan suhu perangkat saat charging mencapai 45°C.
+
+5
+00:00:21,000 --> 00:00:25,500
+Suhu perangkat saat gaming dan suhu perangkat saat charging sama-sama 40°C.
+
+6
+00:00:26,000 --> 00:00:30,500
+Suhu perangkat di dekat kamera dan suhu perangkat di area layar sama-sama 40°C.
