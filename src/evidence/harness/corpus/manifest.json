@@ -1,0 +1,398 @@
+{
+  "cases": [
+    {
+      "case_id": "REG-001A",
+      "failure_type": "PARAPHRASED_EXCERPT",
+      "fixture": "failure-reg-001.txt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "required_propositions": [
+          "3,7 kali lebih luas dibandingkan Galaxy A25",
+          "cooling system berupa Layer Stack Graphite",
+          "luasnya adalah 2.396 mm persegi"
+        ]
+      }
+    },
+    {
+      "case_id": "REG-001B",
+      "failure_type": "PARAPHRASED_EXCERPT",
+      "fixture": "failure-reg-004.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "required_propositions": [
+          "kualitas video dari kamera selfie-nya sudah mulai menurun",
+          "Detail berkurang",
+          "noise di video juga sudah mulai muncul",
+          "hasil video terlihat lebih minim noise",
+          "detailnya tetap terjaga dengan baik",
+          "4K 30 fps, videonya masih terlihat stabil dan minim jitter"
+        ]
+      }
+    },
+    {
+      "case_id": "REG-001C",
+      "failure_type": "PARAPHRASED_EXCERPT",
+      "fixture": "failure-reg-006.txt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "required_propositions": [
+          "kamera smartphone ini bisa kami katakan sudah sangat mumpuni",
+          "bisa diandalkan untuk digunakan sehari-hari"
+        ]
+      }
+    },
+    {
+      "case_id": "REG-002",
+      "failure_type": "FACT_ASSESSMENT",
+      "fixture": "failure-reg-002.srt",
+      "expected_invariant": {
+        "forbidden_combinations": [
+          {
+            "type": "FACT",
+            "reviewer_assessment": "not_null"
+          }
+        ],
+        "required_propositions": [
+          "tidak ada opsi perekaman 60 fps di kamera selfie-nya",
+          "kamera selfie dan ultrawide yang perlu peningkatan, terutama di kondisi low light"
+        ]
+      }
+    },
+    {
+      "case_id": "REG-003",
+      "failure_type": "COMPOUND_VALUE",
+      "fixture": "failure-reg-003.txt",
+      "expected_invariant": {
+        "required_properties": [
+          {
+            "property": "RAM",
+            "value": "8",
+            "unit": "GB"
+          },
+          {
+            "property": "storage",
+            "value": "256",
+            "unit": "GB"
+          }
+        ],
+        "no_compound_value": true
+      }
+    },
+    {
+      "case_id": "REG-004",
+      "failure_type": "CROSS_CHUNK_EXCERPT",
+      "fixture": "failure-reg-005.txt",
+      "expected_invariant": {
+        "source_boundary": "strict",
+        "allowed_segments": [237],
+        "required_propositions": [
+          "Galaxy A26 5G ini merupakan official partner Free Fire dalam ajang Free Fire Nusantara Series 2025"
+        ]
+      }
+    },
+    {
+      "case_id": "REG-005",
+      "failure_type": "UNLEXICALIZED_ASSESSMENT",
+      "fixture": "failure-reg-004.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "check_assessment_lexicon": true,
+        "required_propositions": [
+          "kualitas video dari kamera selfie-nya sudah mulai menurun",
+          "hasil video terlihat lebih minim noise dan detailnya tetap terjaga dengan baik"
+        ]
+      }
+    },
+    {
+      "case_id": "REG-006",
+      "failure_type": "CHANGE_WORD_GENERALIZATION_FAILURE",
+      "fixture": "targeted-regression-001.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "expected_type_assessment": [
+          { "excerpt_contains": "terjaga dengan baik", "expected_type": ["OBSERVATION"], "expected_assessment": null },
+          { "excerpt_contains": "merosot", "expected_type": ["OBSERVATION"], "expected_assessment": null },
+          { "excerpt_contains": "melonjak drastis", "expected_type": ["OBSERVATION"], "expected_assessment": null },
+          { "excerpt_contains": "menyusut", "expected_type": ["OBSERVATION"], "expected_assessment": null },
+          { "excerpt_contains": "terdongkrak", "expected_type": ["OBSERVATION"], "expected_assessment": null },
+          { "excerpt_contains": "stabil", "expected_type": ["OBSERVATION"], "expected_assessment": null }
+        ]
+      }
+    },
+    {
+      "case_id": "REG-007",
+      "failure_type": "OPINION_OVERCORRECTION",
+      "fixture": "targeted-regression-001.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "expected_type_assessment": [
+          { "excerpt_contains": "sangat mengecewakan", "expected_type": ["OPINION"], "expected_assessment": "negative" },
+          { "excerpt_contains": "sangat baik untuk kelas harga", "expected_type": ["OPINION"], "expected_assessment": "positive" },
+          { "excerpt_contains": "menurun drastis dan ini sangat mengecewakan", "expected_type": ["OPINION"], "expected_assessment": "negative" }
+        ]
+      }
+    },
+    {
+      "case_id": "REG-008",
+      "failure_type": "SHARED_PREDICATE_SPLIT",
+      "fixture": "failure-reg-008.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          {
+            "subjects": ["speaker kiri", "speaker kanan"],
+            "must_remain_single": true
+          },
+          {
+            "subjects": ["tombol volume atas", "tombol volume bawah"],
+            "must_remain_single": true
+          },
+          {
+            "subjects": ["foto siang", "foto malam"],
+            "must_remain_single": true
+          },
+          {
+            "subjects": ["kamera selfie", "ultrawide"],
+            "must_remain_single": true
+          }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "REG-009",
+      "failure_type": "SHARED_PREDICATE_PAIRED_CONDITION_CONTROL",
+      "fixture": "targeted-regression-003.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          {
+            "subjects": ["wifi di dalam ruangan", "di luar ruangan"],
+            "must_remain_single": true
+          },
+          {
+            "subjects": ["suhu perangkat saat gaming", "saat charging"],
+            "must_remain_single": true
+          }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+        "case_id": "REG-010",
+        "failure_type": "SHARED_PREDICATE_ATURAN_B_CONFLICT_CONTROL",
+        "fixture": "targeted-regression-004.srt",
+        "expected_invariant": {
+          "excerpt_must_be_literal": true,
+          "shared_predicate_ownership": [
+            { "subjects": ["suhu perangkat saat gaming", "saat charging"], "must_remain_single": true },
+            { "subjects": ["suhu perangkat di dekat kamera", "di area layar"], "must_remain_single": true },
+            { "subjects": ["suhu perangkat saat gaming", "suhu perangkat saat charging"], "must_remain_single": true },
+            { "subjects": ["suhu perangkat di dekat kamera", "suhu perangkat di area layar"], "must_remain_single": true }
+          ]
+        },
+        "metadata": {}
+    },
+    {
+      "case_id": "REG-010A",
+      "failure_type": "SHARED_PREDICATE_CONDITION_ELLIPSIS_ISOLATED",
+      "fixture": "targeted-regression-005a.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["suhu perangkat saat gaming", "saat charging"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "REG-010B",
+      "failure_type": "SHARED_PREDICATE_LOCATION_ELLIPSIS_ISOLATED",
+      "fixture": "targeted-regression-005b.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["suhu perangkat di dekat kamera", "di area layar"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "REG-010C",
+      "failure_type": "SHARED_PREDICATE_CONDITION_EXPLICIT_ISOLATED",
+      "fixture": "targeted-regression-005c.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["suhu perangkat saat gaming", "suhu perangkat saat charging"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "REG-010D",
+      "failure_type": "SHARED_PREDICATE_LOCATION_EXPLICIT_ISOLATED",
+      "fixture": "targeted-regression-005d.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["suhu perangkat di dekat kamera", "suhu perangkat di area layar"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "REG-010E",
+      "failure_type": "SHARED_PREDICATE_POSITIVE_SPLIT_CONTROL_ISOLATED",
+      "fixture": "targeted-regression-005e.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-B1",
+      "failure_type": "MANDATORY_SPLIT_CONTROL",
+      "fixture": "exp-b1-mandatory-split-001.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "required_properties": [
+          { "property": "selfie", "value": "12", "unit": "MP" },
+          { "property": "ultrawide", "value": "8", "unit": "MP" },
+          { "property": "game a", "value": "60", "unit": "FPS" },
+          { "property": "game b", "value": "35", "unit": "FPS" },
+          { "property": "ringan", "value": "8", "unit": "jam" },
+          { "property": "gaming", "value": "4", "unit": "jam" }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-B2",
+      "failure_type": "MANDATORY_SPLIT_DIFFERENT_VALUE_CONTROL",
+      "fixture": "targeted-regression-005e.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "required_properties": [
+          { "property": "gaming", "value": "38", "unit": "\u00b0C" },
+          { "property": "charging", "value": "45", "unit": "\u00b0C" }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-C1",
+      "failure_type": "NAMED_SUBTOPIC_COLLISION_CONTROL",
+      "fixture": "exp-c-named-subtopic-collision-001.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          {
+            "subjects": ["speaker", "mikrofon"],
+            "must_remain_single": true
+          }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-C2",
+      "failure_type": "NAMED_SUBTOPIC_COLLISION_CONTROL",
+      "fixture": "exp-c-named-subtopic-collision-001.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          {
+            "subjects": ["brightness", "refresh rate"],
+            "must_remain_single": true
+          }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-D1",
+      "failure_type": "SHARED_PREDICATE_DECONFOUND_REWORDED",
+      "fixture": "targeted-regression-006-expd1.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["kamera selfie", "ultrawide"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-D2",
+      "failure_type": "SHARED_PREDICATE_DECONFOUND_REWORDED",
+      "fixture": "targeted-regression-006-expd2.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["kamera selfie", "ultrawide"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-E",
+      "failure_type": "SHARED_PREDICATE_VERBATIM_CONTROL",
+      "fixture": "targeted-regression-007-expe.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["kamera selfie", "ultrawide"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-F1",
+      "failure_type": "SHARED_PREDICATE_LENGTH_CONTROL_NO_PRIMING",
+      "fixture": "targeted-regression-008-expf1.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["kamera selfie", "ultrawide"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-F2",
+      "failure_type": "SHARED_PREDICATE_ANALOG_PRIMING",
+      "fixture": "targeted-regression-008-expf2.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["kamera selfie", "ultrawide"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+        {
+      "case_id": "EXP-G1",
+      "failure_type": "SHARED_PREDICATE_NAMED_SUBTOPIC_DENSITY_CONTROL",
+      "fixture": "targeted-regression-008-expg1.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["speaker", "mikrofon"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    },
+    {
+      "case_id": "EXP-G2",
+      "failure_type": "SHARED_PREDICATE_NAMED_SUBTOPIC_DENSITY_CONTROL",
+      "fixture": "targeted-regression-008-expg2.srt",
+      "expected_invariant": {
+        "excerpt_must_be_literal": true,
+        "shared_predicate_ownership": [
+          { "subjects": ["brightness", "refresh rate"], "must_remain_single": true }
+        ]
+      },
+      "metadata": {}
+    }
+  ]
+}
