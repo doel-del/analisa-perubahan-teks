@@ -1,0 +1,1 @@
+# analisa-perubahan-teks
