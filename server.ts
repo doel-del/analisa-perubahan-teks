@@ -98,7 +98,12 @@ async function callGeminiAPI(
   const payload = {
     contents: [{ parts: [{ text: `${promptInstruction}\n\n--- TEKS UNTUK DIKOREKSI ---\n${text}` }] }],
     system_instruction: { parts: [{ text: systemInstruction }] },
-    generationConfig: { temperature: 0.1 }
+    generationConfig: { 
+      temperature: 0.1,
+      topP: 0.9,
+      topK: 1,
+      candidateCount: 1
+    }
   };
 
   const response = await fetch(url, {
@@ -475,6 +480,15 @@ app.post('/api/analyze-review', async (req, res) => {
           PRODUCTION_SYSTEM_INSTRUCTION_EVIDENCE
         );
 
+        // 🔥 ADD THIS FOR DEBUGGING
+        console.log(`[CHUNK ${batchNumber}] RAW_OUTPUT:`, JSON.stringify({
+          chunkIndex,
+          chunkText: chunkText.substring(0, 200) + '...',
+          rawOutput: rawOutput.substring(0, 1000) + '...',
+          timestamp: new Date().toISOString()
+        }));
+        // ... End DEBUGGING
+
         const chunkEvidence = parseEvidenceJSON(rawOutput);
         const validEvidence = chunkEvidence.filter(isValidEvidence);
 
@@ -583,6 +597,23 @@ app.post('/api/analyze-review', async (req, res) => {
     console.log(
       `✅ Total final evidence: ${finalEvidence.length}`
     );
+    // Tambah di server.ts sebelum res.json() line 598:
+console.log(JSON.stringify({
+  phase: 'FINAL_STATS',
+  totalExtracted: identifiedEvidence.length,
+  afterValidation: allEvidence.length, // before dedup
+  quarantined: quarantinedEvidence.length,
+  duplicateRemoved: duplicateRemovedDetails.length,
+  duplicateMerged: duplicateMergedDetails.length,
+  finalCount: finalEvidence.length,
+  // DEBUG: detail setiap kandidat duplicate
+  duplicateCandidates: duplicateResult.candidates.map(c => ({
+    idA: c.evidenceA.evidence_id,
+    idB: c.evidenceB.evidence_id,
+    similarity: c.similarity,
+    reasons: c.reasons
+  }))
+}, null, 2));
     
     // ==================================================
     // 7. RESPONSE + STATS
