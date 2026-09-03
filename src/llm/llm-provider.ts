@@ -18,7 +18,7 @@ export interface LLMConfig {
 export interface LLMResponse {
   success: boolean;
   content: string;
-  provider: LLMProvider;
+  provider: LLMProvider | 'unknown';
   model: string;
   error?: string;
 }
