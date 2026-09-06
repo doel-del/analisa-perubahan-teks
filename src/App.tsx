@@ -64,7 +64,7 @@ export default function App() {
 
   // --- STATE UNTUK TAB ANALISIS & EVIDENCE ---
   const [activeTab, setActiveTab] = useState<'cleaning' | 'analysis'>('cleaning');
-  
+
   // State baru untuk 2 file
   const [srtContent, setSrtContent] = useState<string>('');
   const [metadata, setMetadata] = useState<Record<string, any>>({});
@@ -85,6 +85,9 @@ export default function App() {
 
   // State Duplicate Removed
   const [duplicateRemovedDetails, setDuplicateRemovedDetails] = useState<any[]>([]);
+
+  // --- STATE MODE ANALISIS ---
+  const [analysisMode, setAnalysisMode] = useState<'full' | 'summary' | 'evidence'>('full');
 
   // --- HANDLERS UNTUK CLEANING ---
   const handleReset = () => {
@@ -116,7 +119,6 @@ export default function App() {
       const content = e.target?.result as string;
       if (isMetadata) {
         try {
-          // Parse JSON metadata
           const parsed = JSON.parse(content);
           setMetadata(parsed);
           setAnalysisError(null);
@@ -124,7 +126,6 @@ export default function App() {
           setAnalysisError('Format metadata.json tidak valid. Pastikan file berupa JSON yang benar.');
         }
       } else {
-        // Teks SRT
         setSrtContent(content);
         setAnalysisError(null);
       }
@@ -132,7 +133,7 @@ export default function App() {
     reader.readAsText(file);
   };
 
-  // --- HANDLER UNTUK ANALISIS (MENGIRIM 2 DATA KE SERVER) ---
+  // --- HANDLER UNTUK ANALISIS (DENGAN MODE) ---
   const handleAnalyze = async () => {
     if (!srtContent.trim()) {
       setAnalysisError('Silakan unggah / tempel konten transcript.srt terlebih dahulu.');
@@ -143,18 +144,23 @@ export default function App() {
     setAnalysisError(null);
     setReviewSummary('');
     setEvidenceList([]);
-    setQuarantineList([]); // reset
+    setQuarantineList([]);
     setStats(null);
     setDuplicateRemovedDetails([]);
 
+    // Pilih endpoint berdasarkan mode
+    let endpoint = '/api/analyze-review';
+    if (analysisMode === 'summary') endpoint = '/api/summary';
+    if (analysisMode === 'evidence') endpoint = '/api/evidence';
+
     try {
-      // Kirim metadata dan srtContent sekaligus!
-      const response = await fetch('/api/analyze-review', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          metadata, // Kirim objek JSON
-          srtContent // Kirim string SRT
+          metadata,
+          srtContent,
+          reviewerName: 'Reviewer'
         }),
       });
 
@@ -163,11 +169,20 @@ export default function App() {
         throw new Error(data.error || 'Gagal memproses analisis.');
       }
 
-      setReviewSummary(data.summary);
-      setEvidenceList(data.evidence || []);
-      setQuarantineList(data.quarantine || []); // simpan
-      setStats(data.stats || null);
-      setDuplicateRemovedDetails(data.duplicateRemoved || []);
+      if (analysisMode === 'summary') {
+        setReviewSummary(data.summary);
+      } else if (analysisMode === 'evidence') {
+        setEvidenceList(data.evidence || []);
+        setQuarantineList(data.quarantine || []);
+        setStats(data.stats || null);
+        setDuplicateRemovedDetails(data.duplicateRemoved || []);
+      } else { // full
+        setReviewSummary(data.summary);
+        setEvidenceList(data.evidence || []);
+        setQuarantineList(data.quarantine || []);
+        setStats(data.stats || null);
+        setDuplicateRemovedDetails(data.duplicateRemoved || []);
+      }
 
     } catch (err: any) {
       console.error('Analysis Error:', err);
@@ -176,10 +191,6 @@ export default function App() {
       setIsAnalyzing(false);
     }
   };
-  
-  useEffect(() => {
-    console.log('quarantineList:', quarantineList);
-  }, [quarantineList]);
 
   // --- DOWNLOAD HANDLERS ---
   const downloadFile = (content: string, fileName: string, mimeType: string) => {
@@ -246,12 +257,28 @@ export default function App() {
               onSwapText={handleSwapText}
             />
             <div className="space-y-3 pt-2">
-              <DiffToolbar granularity={granularity} onGranularityChange={setGranularity} viewMode={viewMode} onViewModeChange={setViewMode} totalChanges={summary.totalChanges} />
+              <DiffToolbar 
+                granularity={granularity} 
+                onGranularityChange={setGranularity} 
+                viewMode={viewMode} 
+                onViewModeChange={setViewMode} 
+                totalChanges={summary.totalChanges} 
+              />
               <ChangeSummaryCards summary={summary} />
             </div>
             <div className="space-y-6">
-              <ColoredDiffViewer parts={annotatedParts} viewMode={viewMode} selectedChangeItem={selectedChangeItem} onSelectChangeItem={setSelectedChangeItem} allChangeItems={changeItems} />
-              <ChangeList changeItems={changeItems} selectedItem={selectedChangeItem} onSelectItem={setSelectedChangeItem} />
+              <ColoredDiffViewer 
+                parts={annotatedParts} 
+                viewMode={viewMode} 
+                selectedChangeItem={selectedChangeItem} 
+                onSelectChangeItem={setSelectedChangeItem} 
+                allChangeItems={changeItems} 
+              />
+              <ChangeList 
+                changeItems={changeItems} 
+                selectedItem={selectedChangeItem} 
+                onSelectItem={setSelectedChangeItem} 
+              />
             </div>
           </div>
         )}
@@ -259,79 +286,190 @@ export default function App() {
         {/* --- KONTEN TAB ANALISIS & EVIDENCE (DENGAN UPLOAD 2 FILE) --- */}
         {activeTab === 'analysis' && (
           <div className="space-y-4">
+
             {analysisError && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-800">
                 ⚠️ {analysisError}
               </div>
             )}
 
+            {/* --- PILIHAN MODE ANALISIS --- */}
+            <div className="flex flex-wrap items-center gap-4 bg-white p-3 rounded-xl border border-slate-300 shadow-xs">
+              <span className="text-sm font-semibold text-slate-700">Mode Analisis:</span>
+              <label className="flex items-center gap-1 text-xs cursor-pointer">
+                <input
+                  type="radio"
+                  value="full"
+                  checked={analysisMode === 'full'}
+                  onChange={() => setAnalysisMode('full')}
+                />
+                Lengkap (Summary + Evidence)
+              </label>
+              <label className="flex items-center gap-1 text-xs cursor-pointer">
+                <input
+                  type="radio"
+                  value="summary"
+                  checked={analysisMode === 'summary'}
+                  onChange={() => setAnalysisMode('summary')}
+                />
+                Summary saja
+              </label>
+              <label className="flex items-center gap-1 text-xs cursor-pointer">
+                <input
+                  type="radio"
+                  value="evidence"
+                  checked={analysisMode === 'evidence'}
+                  onChange={() => setAnalysisMode('evidence')}
+                />
+                Evidence saja
+              </label>
+            </div>
+
+            {/* --- TOMBOL DOWNLOAD (disesuaikan dengan mode) --- */}
             {(reviewSummary || evidenceList.length > 0) && (
               <div className="flex flex-wrap gap-3 pb-1">
-                <button onClick={handleDownloadSummary} disabled={!reviewSummary} className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors disabled:opacity-50">
-                  📥 Download Summary (.md)
-                </button>
-                <button onClick={handleDownloadEvidence} disabled={evidenceList.length === 0} className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors disabled:opacity-50">
-                  📥 Download Evidence (.json)
-                </button>
-                <h3 className="text-sm font-semibold text-slate-700">📊 Ringkasan Hasil Evidence</h3>
-                  {/* Ringkasan Statistik */}
-                  {stats && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-slate-300 shadow-xs">
-                      {/* Detail Duplicate Removed */}
-                      {duplicateRemovedDetails.length > 0 && (
-                        <details className="bg-white border border-slate-300 rounded-xl p-3 shadow-xs">
-                          <summary className="text-xs font-semibold text-red-700 cursor-pointer hover:text-red-800">
-                            🗑️ Duplicate Dihapus ({duplicateRemovedDetails.length})
-                          </summary>
-                          <div className="mt-2 max-h-48 overflow-y-auto space-y-2">
-                            {duplicateRemovedDetails.map((item, idx) => (
-                              <div key={idx} className="border-b border-red-100 pb-2 last:border-0">
-                                <div className="flex justify-between items-start gap-2">
-                                  <span className="text-[10px] font-mono bg-red-200/70 px-1.5 py-0.5 rounded text-red-800">
-                                    ID: {item.evidence_id}
-                                  </span>
-                                  <span className="text-[10px] text-red-600 italic text-right max-w-[60%]">
-                                    {item.reason}
-                                  </span>
-                                </div>
-                                <p className="text-[10px] text-slate-500 mt-0.5">
-                                  Tetap mempertahankan: <strong>{item.kept_evidence_id}</strong>
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        </details>
-                      )}
-
-                    </div>
-                  )}
-                  {evidenceList.length > 0 && stats && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-slate-300 shadow-xs">
-                      <div>
-                        <div className="text-xs text-slate-500">Total Evidence Diekstrak</div>
-                        <div className="text-lg font-bold text-slate-800">{stats.totalExtracted}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-slate-500">Lolos Validasi</div>
-                        <div className="text-lg font-bold text-emerald-600">{evidenceList.length}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-slate-500">Di-Quarantine</div>
-                        <div className="text-lg font-bold text-amber-600">{quarantineList.length}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-slate-500">Duplicate Dihapus</div>
-                        <div className="text-lg font-bold text-red-600">{stats.duplicateRemoved}</div>
-                      </div>
-                    </div>
-                  )}
-
+                {analysisMode !== 'evidence' && (
+                  <button 
+                    onClick={handleDownloadSummary} 
+                    disabled={!reviewSummary} 
+                    className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors disabled:opacity-50"
+                  >
+                    📥 Download Summary (.md)
+                  </button>
+                )}
+                {analysisMode !== 'summary' && (
+                  <button 
+                    onClick={handleDownloadEvidence} 
+                    disabled={evidenceList.length === 0} 
+                    className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors disabled:opacity-50"
+                  >
+                    📥 Download Evidence (.json)
+                  </button>
+                )}
               </div>
             )}
-            
+
+            {/* --- STATISTIK + DETAIL (DUPLICATE & QUARANTINE) --- */}
+            {analysisMode !== 'summary' && stats && (
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-slate-700">📊 Ringkasan Hasil Evidence</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-slate-300 shadow-xs">
+                  <div>
+                    <div className="text-xs text-slate-500">Total Evidence Diekstrak</div>
+                    <div className="text-lg font-bold text-slate-800">{stats.totalExtracted}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-500">Lolos Validasi</div>
+                    <div className="text-lg font-bold text-emerald-600">{evidenceList.length}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-500">Di-Quarantine</div>
+                    <div className="text-lg font-bold text-amber-600">{quarantineList.length}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-500">Duplicate Dihapus</div>
+                    <div className="text-lg font-bold text-red-600">{stats.duplicateRemoved}</div>
+                  </div>
+                </div>
+
+                {/* --- DUA DETAIL SIDE-BY-SIDE (jika ada data) --- */}
+                {(duplicateRemovedDetails.length > 0 || quarantineList.length > 0) && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {/* Detail Duplicate Dihapus */}
+                    {duplicateRemovedDetails.length > 0 && (
+                      <details className="bg-white border border-slate-300 rounded-xl p-3 shadow-xs">
+                        <summary className="text-xs font-semibold text-red-700 cursor-pointer hover:text-red-800">
+                          🗑️ Detail Duplicate Dihapus ({duplicateRemovedDetails.length})
+                        </summary>
+                        <div className="mt-2 max-h-48 overflow-y-auto space-y-2">
+                          {duplicateRemovedDetails.map((item, idx) => (
+                            <div key={idx} className="border-b border-red-100 pb-2 last:border-0">
+                              <div className="flex justify-between items-start gap-2">
+                                <span className="text-[10px] font-mono bg-red-200/70 px-1.5 py-0.5 rounded text-red-800">
+                                  ID: {item.evidence_id}
+                                </span>
+                                <span className="text-[10px] text-red-600 italic text-right max-w-[60%]">
+                                  {item.reason}
+                                </span>
+                              </div>
+                              <p className="text-[10px] text-slate-500 mt-0.5">
+                                Tetap mempertahankan: <strong>{item.kept_evidence_id}</strong>
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    )}
+
+                    {/* Detail Quarantine */}
+                    {quarantineList.length > 0 && (
+                      <details className="bg-white border border-slate-300 rounded-xl p-3 shadow-xs">
+                        <summary className="text-xs font-semibold text-amber-700 cursor-pointer hover:text-amber-800">
+                          ⚠️ Evidence di-Quarantine ({quarantineList.length})
+                        </summary>
+                        <div className="mt-2 max-h-48 overflow-y-auto space-y-2">
+                          {quarantineList.map((item, idx) => {
+                            if (typeof item === 'string') {
+                              return (
+                                <div key={idx} className="border-b border-amber-100 pb-2 last:border-0">
+                                  <div className="flex justify-between items-start gap-2">
+                                    <span className="text-[10px] font-mono bg-amber-200/70 px-1.5 py-0.5 rounded text-amber-800">
+                                      Item #{idx + 1}
+                                    </span>
+                                    <span className="text-[10px] text-amber-600 italic break-words text-right max-w-[60%]">
+                                      {item}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            }
+
+                            const reason = item.reason || 'Alasan tidak diketahui';
+                            const chunkLabel = (item.chunkIndex !== undefined && item.chunkIndex !== null)
+                              ? `Chunk #${item.chunkIndex + 1}`
+                              : `Item #${idx + 1}`;
+                            const evidence = item.evidence || {};
+
+                            return (
+                              <div key={idx} className="border-b border-amber-100 pb-2 last:border-0">
+                                <div className="flex justify-between items-start gap-2">
+                                  <span className="text-[10px] font-mono bg-amber-200/70 px-1.5 py-0.5 rounded text-amber-800">
+                                    {chunkLabel}
+                                  </span>
+                                  <span className="text-[10px] text-amber-600 italic break-words text-right max-w-[60%]">
+                                    {reason}
+                                  </span>
+                                </div>
+                                {evidence.claim && (
+                                  <p className="text-[11px] text-slate-700 mt-1">
+                                    <span className="font-semibold">Claim:</span> {evidence.claim}
+                                  </p>
+                                )}
+                                {evidence.source_excerpt && (
+                                  <p className="text-[10px] text-slate-500 italic mt-0.5 truncate">
+                                    <span className="font-medium">Excerpt:</span> "{evidence.source_excerpt}"
+                                  </p>
+                                )}
+                                {evidence.evidence_id && (
+                                  <p className="text-[10px] text-slate-400 mt-0.5">
+                                    ID: {evidence.evidence_id}
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </details>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* --- 3 KOLOM INPUT, SUMMARY, EVIDENCE --- */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               
-              {/* KOLOM 1: Input File SRT & METADATA */}
+              {/* KOLOM 1: Upload File */}
               <div className="bg-white border border-slate-300 rounded-xl shadow-xs p-4 flex flex-col min-h-[300px]">
                 <h3 className="text-sm font-bold text-slate-800 mb-2">1. Upload File</h3>
                 
@@ -378,13 +516,19 @@ export default function App() {
                   )}
                 </div>
 
-                {/* Tombol Jalankan */}
+                {/* Tombol Jalankan dengan teks dinamis */}
                 <button
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || !srtContent.trim()}
                   className="mt-auto w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isAnalyzing ? '⏳ Menganalisis...' : '🚀 Jalankan Analisis'}
+                  {isAnalyzing
+                    ? '⏳ Menganalisis...'
+                    : analysisMode === 'full'
+                      ? '🚀 Jalankan Analisis Lengkap'
+                      : analysisMode === 'summary'
+                        ? '📝 Buat Summary'
+                        : '🔍 Ekstrak Evidence'}
                 </button>
               </div>
 
@@ -396,13 +540,15 @@ export default function App() {
                     <div className="text-slate-400 italic animate-pulse">Sedang membuat ringkasan...</div>
                   ) : reviewSummary ? (
                     reviewSummary
+                  ) : analysisMode === 'evidence' ? (
+                    <span className="text-slate-400 italic">Mode Evidence saja, summary tidak diproses.</span>
                   ) : (
                     <span className="text-slate-400 italic">Hasil Summary AI akan muncul di sini.</span>
                   )}
                 </div>
               </div>
 
-              {/* KOLOM 3: Evidence Extraction */}
+              {/* KOLOM 3: Evidence Extraction (tanpa quarantine) */}
               <div className="bg-white border border-slate-300 rounded-xl shadow-xs p-4 flex flex-col min-h-[300px]">
                 <h3 className="text-sm font-bold text-slate-800 mb-2">3. Evidence (Dengan Timestamp)</h3>
                 <div className="flex-1 bg-slate-50 p-3 rounded-lg border border-slate-200 overflow-y-auto text-xs text-slate-700 min-h-[200px]">
@@ -423,75 +569,13 @@ export default function App() {
                         </div>
                       ))}
                     </div>
+                  ) : analysisMode === 'summary' ? (
+                    <span className="text-slate-400 italic">Mode Summary saja, evidence tidak diproses.</span>
                   ) : (
                     <span className="text-slate-400 italic">JSON Evidence dengan Timestamp akan muncul di sini.</span>
                   )}
                 </div>
-                {/* --- TAMBAHKAN BAGIAN QUARANTINE DI SINI --- */}
-                {Array.isArray(quarantineList) && quarantineList.length > 0 && (
-                  <details className="mt-3 border-t border-slate-200 pt-3" open>
-                    <summary className="text-xs font-semibold text-amber-700 cursor-pointer hover:text-amber-800 flex items-center gap-1">
-                      ⚠️ Evidence di-Quarantine ({quarantineList.length})
-                    </summary>
-                    <div className="mt-2 max-h-48 overflow-y-auto space-y-2 bg-amber-50 p-2 rounded border border-amber-200">
-                      {quarantineList.map((item, idx) => {
-                        // Jika item adalah string, tampilkan sebagai alasan saja
-                        if (typeof item === 'string') {
-                          return (
-                            <div key={idx} className="border-b border-amber-100 pb-2 last:border-0">
-                              <div className="flex justify-between items-start gap-2">
-                                <span className="text-[10px] font-mono bg-amber-200/70 px-1.5 py-0.5 rounded text-amber-800">
-                                  Item #{idx + 1}
-                                </span>
-                                <span className="text-[10px] text-amber-600 italic break-words text-right max-w-[60%]">
-                                  {item}
-                                </span>
-                              </div>
-                            </div>
-                          );
-                        }
-
-                        // Jika item adalah object, tampilkan detail
-                        const reason = item.reason || 'Alasan tidak diketahui';
-                        const chunkLabel = (item.chunkIndex !== undefined && item.chunkIndex !== null)
-                          ? `Chunk #${item.chunkIndex + 1}`
-                          : `Item #${idx + 1}`;
-                        const evidence = item.evidence || {};
-
-                        return (
-                          <div key={idx} className="border-b border-amber-100 pb-2 last:border-0">
-                            <div className="flex justify-between items-start gap-2">
-                              <span className="text-[10px] font-mono bg-amber-200/70 px-1.5 py-0.5 rounded text-amber-800">
-                                {chunkLabel}
-                              </span>
-                              <span className="text-[10px] text-amber-600 italic break-words text-right max-w-[60%]">
-                                {reason}
-                              </span>
-                            </div>
-                            
-                            {evidence.claim && (
-                              <p className="text-[11px] text-slate-700 mt-1">
-                                <span className="font-semibold">Claim:</span> {evidence.claim}
-                              </p>
-                            )}
-                            {evidence.source_excerpt && (
-                              <p className="text-[10px] text-slate-500 italic mt-0.5 truncate">
-                                <span className="font-medium">Excerpt:</span> "{evidence.source_excerpt}"
-                              </p>
-                            )}
-                            {evidence.evidence_id && (
-                              <p className="text-[10px] text-slate-400 mt-0.5">
-                                ID: {evidence.evidence_id}
-                              </p>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </details>
-                )}
               </div>
-
             </div>
           </div>
         )}
