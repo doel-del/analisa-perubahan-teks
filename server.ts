@@ -34,6 +34,9 @@ import type {
 import type { SRTSegment } from './src/evidence/srt';
 import { normalizeForSearch } from './src/evidence/srt';
 
+// 📦 Impor unified LLM provider
+import { callLLMAPI, callLLMWithFallback, getActiveProvider } from './src/llm/llm-provider';
+
 dotenv.config();
 
 const app = express();
@@ -79,83 +82,210 @@ function safeReadJSON(filePath: string): Record<string, string> {
 }
 
 // ==========================================
-// 3. HELPER AI FUNCTIONS
+// 3. HELPER AI FUNCTIONS — SUDAH DIGANTI DENGAN UNIFIED LLM PROVIDER
 // ==========================================
+// Fungsi callGeminiAPI dan callGroqAPI lokal telah dihapus,
+// karena semua panggilan LLM menggunakan src/llm/llm-provider.ts
 
-async function callGeminiAPI(
-  text: string,
-  promptInstruction: string,
-  systemInstruction: string
+// ==========================================
+// FUNGSI GENERATE SUMMARY (TERPISAH)
+// ==========================================
+async function generateSummary(
+  srtContent: string,
+  metadata: ReviewMetadata = {},
+  reviewerName: string = 'Reviewer'
 ): Promise<string> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error('GEMINI_API_KEY tidak ditemukan.');
+  const segments = parseSRT(srtContent);
+  if (segments.length === 0) {
+    throw new Error('Format transcript.srt tidak valid atau tidak memiliki segment.');
   }
 
-  const model = 'gemini-3.5-flash-lite';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const resolvedReviewerName = getReviewerName(metadata, reviewerName);
+  const metadataContext = buildMetadataContext(metadata);
+  const fullText = segments.map(seg => seg.text).join(' ');
 
-  const payload = {
-    contents: [{ parts: [{ text: `${promptInstruction}\n\n--- TEKS UNTUK DIKOREKSI ---\n${text}` }] }],
-    system_instruction: { parts: [{ text: systemInstruction }] },
-    generationConfig: { 
-      temperature: 0.1,
-      topP: 0.9,
-      topK: 1,
-      candidateCount: 1
+  const summaryInstruction =
+    `IDENTITAS REVIEW:\n${metadataContext || `Channel/Reviewer: ${resolvedReviewerName}`}\n\n` +
+    `SOURCE OF TRUTH: transcript.srt.\n` +
+    `Metadata hanya digunakan untuk identitas review dan konteks administratif.\n` +
+    `Jangan menggunakan metadata sebagai evidence isi produk.\n\n` +
+    ANALYSIS_PROMPT_SUMMARY;
+
+  const result = await callLLMWithFallback(
+    fullText,
+    summaryInstruction,
+    'Anda adalah perangkum produk yang objektif. Gunakan transcript sebagai satu-satunya sumber isi review.',
+    getActiveProvider(),
+    ['deepseek', 'gemini']
+  );
+
+  if (!result.success) {
+    throw new Error(result.error || 'Gagal mendapatkan summary dari LLM');
+  }
+  return result.content;
+}
+
+// ==========================================
+// FUNGSI EXTRACT EVIDENCE (TERPISAH)
+// ==========================================
+async function extractEvidence(
+  srtContent: string,
+  metadata: ReviewMetadata = {},
+  reviewerName: string = 'Reviewer'
+): Promise<{
+  evidence: EvidenceItem[];
+  quarantine: Array<{ evidence: EvidenceItem; reason?: string; chunkIndex: number }>;
+  duplicateRemoved: Array<{ evidence_id: string; reason: string; kept_evidence_id: string }>;
+  duplicateMerged: Array<{ evidence_id_a: string; evidence_id_b: string; merged_evidence_id: string; reason: string }>;
+  stats: {
+    totalExtracted: number;
+    duplicateRemoved: number;
+    mergedCount: number;
+    finalCount: number;
+    quarantineCount: number;
+  };
+}> {
+  // Parse SRT
+  const segments = parseSRT(srtContent);
+  if (segments.length === 0) {
+    throw new Error('Format transcript.srt tidak valid atau tidak memiliki segment.');
+  }
+
+  const resolvedReviewerName = getReviewerName(metadata, reviewerName);
+  const metadataContext = buildMetadataContext(metadata);
+
+  // Chunking
+  const evidenceChunks = buildEvidenceChunks(segments, 18000, 3);
+  console.log(`📦 Evidence extraction akan menggunakan ${evidenceChunks.length} chunk.`);
+
+  let allEvidence: EvidenceItem[] = [];
+  let quarantineSequence = 0;
+  const quarantinedEvidence: Array<{
+    evidence: EvidenceItem;
+    reason?: string;
+    chunkIndex: number;
+  }> = [];
+
+  // Loop per chunk
+  for (let chunkIndex = 0; chunkIndex < evidenceChunks.length; chunkIndex++) {
+    const chunk = evidenceChunks[chunkIndex];
+    const batchNumber = chunkIndex + 1;
+    const totalBatches = evidenceChunks.length;
+
+    console.log(`📦 Mengekstrak Chunk Evidence ke-${batchNumber}/${totalBatches} ...`);
+
+    const chunkText = buildChunkText(chunk);
+    const evidenceInstruction = buildEvidenceInstruction(
+      metadata,
+      reviewerName,
+      batchNumber,
+      totalBatches
+    );
+
+    try {
+      const result = await callLLMWithFallback(
+        chunkText,
+        evidenceInstruction,
+        PRODUCTION_SYSTEM_INSTRUCTION_EVIDENCE,
+        getActiveProvider(),
+        ['deepseek', 'gemini']
+      );
+
+      if (!result.success) {
+        throw new Error(result.error || 'Gagal mengekstrak evidence dari LLM');
+      }
+
+      const rawOutput = result.content;
+      const chunkEvidence = parseEvidenceJSON(rawOutput);
+      const validEvidence = chunkEvidence.filter(isValidEvidence);
+
+      if (validEvidence.length === 0) {
+        console.log(`⚠️ Chunk ke-${batchNumber} tidak menghasilkan evidence valid.`);
+        continue;
+      }
+
+      for (const ev of validEvidence) {
+        const context: EvidenceContext = {
+          chunkIndex,
+          chunkText,
+          chunkSegments: chunk
+        };
+
+        const report: EvidenceValidationReport = EvidenceValidator.validate(ev, context);
+
+        if (report.accepted) {
+          allEvidence.push({
+            ...ev,
+            validation: report
+          });
+        } else {
+          quarantineSequence++;
+          quarantinedEvidence.push({
+            evidence: {
+              ...ev,
+              evidence_id: `Q${String(quarantineSequence).padStart(3, '0')}`
+            },
+            reason: report.quarantineReason,
+            chunkIndex
+          });
+        }
+      }
+
+      console.log(`✅ Chunk ke-${batchNumber} selesai. Total valid: ${allEvidence.length}, Quarantine: ${quarantinedEvidence.length}`);
+    } catch (err) {
+      console.error(`❌ Gagal memproses Chunk ke-${batchNumber}:`, err);
+      continue;
+    }
+  }
+
+  // Assign ID
+  const identifiedEvidence = assignEvidenceIds(allEvidence);
+  console.log(`🏷️ Evidence ID telah di-assign: ${identifiedEvidence.length} evidence.`);
+
+  // Duplicate Gate
+  const duplicateResult = DuplicateValidator.detect(identifiedEvidence);
+  const { preservedEvidence, duplicateRemovedDetails, duplicateMergedDetails } =
+    resolveDuplicateActions(identifiedEvidence, duplicateResult);
+
+  console.log(`🧹 Duplicate gate selesai: ${identifiedEvidence.length} -> ${preservedEvidence.length}`);
+
+  // Tambahkan timestamp & metadata
+  const finalEvidence = preservedEvidence.map(ev => {
+    const timestamp = ev.source_coordinates
+      ? getTimestampFromCoordinates(ev.source_coordinates, segments)
+      : { timestamp_start: null, timestamp_end: null };
+
+    return {
+      ...ev,
+      timestamp_start: timestamp.timestamp_start,
+      timestamp_end: timestamp.timestamp_end,
+      source: resolvedReviewerName,
+      review_id: metadata.id ?? null,
+      video_url: metadata.url ?? null,
+      video_title: metadata.title ?? null
+    };
+  });
+
+  const duplicateRemovedCount = duplicateRemovedDetails.length;
+  const mergedCount = duplicateMergedDetails.length;
+
+  return {
+    evidence: finalEvidence,
+    quarantine: quarantinedEvidence,
+    duplicateRemoved: duplicateRemovedDetails,
+    duplicateMerged: duplicateMergedDetails,
+    stats: {
+      totalExtracted: identifiedEvidence.length,
+      duplicateRemoved: duplicateRemovedCount,
+      mergedCount,
+      finalCount: finalEvidence.length,
+      quarantineCount: quarantinedEvidence.length
     }
   };
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Gemini Raw Error Response:', errorText);
-    throw new Error(`Gemini API Error (Status ${response.status}): ${errorText.substring(0, 200)}`);
-  }
-
-  const data = await response.json();
-  const candidate = data.candidates?.[0];
-  if (!candidate || !candidate.content || !candidate.content.parts || !candidate.content.parts[0].text) {
-    throw new Error('Gemini mengembalikan respons yang tidak valid atau kosong.');
-  }
-  return candidate.content.parts[0].text.trim();
-}
-
-// Helper Groq (Fallback)
-async function callGroqAPI(
-  text: string,
-  promptInstruction: string,
-  systemInstruction: string
-): Promise<string> {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) { throw new Error('GROQ_API_KEY tidak ditemukan.'); }
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: systemInstruction },
-        { role: 'user', content: `${promptInstruction}\n\n--- TEKS UNTUK DIKOREKSI ---\n${text}` },
-      ],
-      temperature: 0.1,
-    }),
-  });
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error?.message || `Groq API Error: ${response.status}`);
-  }
-  const data = await response.json();
-  return data.choices[0].message.content.trim();
 }
 
 // ==========================================
-// 4. API ROUTES (FITUR CLEANING & KAMUS) - (TIDAK BERUBAH)
+// 4. API ROUTES (FITUR CLEANING & KAMUS)
 // ==========================================
 app.get('/api/templates', (req, res) => {
   const templateList = PROMPT_TEMPLATES.map(({ id, name }) => ({ id, name }));
@@ -169,7 +299,15 @@ app.post('/api/correct-text', async (req, res) => {
     let promptInstruction = '';
     const systemInstruction = `Anda adalah ahli penyunting tata bahasa...`;
     try {
-      const correctedText = await callGeminiAPI(text, promptInstruction, systemInstruction);
+      // Gunakan unified LLM provider
+      const result = await callLLMAPI(
+        text,
+        promptInstruction,
+        systemInstruction,
+        getActiveProvider() // provider dari env atau default 'groq'
+      );
+      if (!result.success) throw new Error(result.error);
+      const correctedText = result.content;
       return res.json({ success: true, correctedText, mode });
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
@@ -357,16 +495,7 @@ export function resolveDuplicateActions(
 
 app.post('/api/analyze-review', async (req, res) => {
   try {
-    const {
-      metadata: rawMetadata = {},
-      srtContent,
-      reviewerName = 'Reviewer'
-    } = req.body;
-
-    const metadata: ReviewMetadata =
-      rawMetadata && typeof rawMetadata === 'object'
-        ? rawMetadata
-        : {};
+    const { metadata = {}, srtContent, reviewerName = 'Reviewer' } = req.body;
 
     if (!srtContent || typeof srtContent !== 'string') {
       return res.status(400).json({
@@ -374,273 +503,21 @@ app.post('/api/analyze-review', async (req, res) => {
       });
     }
 
-    // ==================================================
-    // 1. PARSING SRT
-    // ==================================================
-
-    const segments = parseSRT(srtContent);
-
-    if (segments.length === 0) {
-      return res.status(400).json({
-        error: 'Format transcript.srt tidak valid atau tidak memiliki segment.'
-      });
-    }
-
-    const resolvedReviewerName =
-      getReviewerName(metadata, reviewerName);
-
-    const metadataContext =
-      buildMetadataContext(metadata);
-
-    const fullText = segments
-      .map(segment => segment.text)
-      .join(' ');
-
-    console.log(
-      `🎬 Transcript berhasil diparsing: ${segments.length} segment.`
-    );
-
-    // ==================================================
-    // 2. TAHAP 1 — REVIEW SUMMARY
-    // ==================================================
-
-    const summaryInstruction =
-      `IDENTITAS REVIEW:\\n${metadataContext || `Channel/Reviewer: ${resolvedReviewerName}`}\\n\\n` +
-      `SOURCE OF TRUTH: transcript.srt.\\n` +
-      `Metadata hanya digunakan untuk identitas review dan konteks administratif.\\n` +
-      `Jangan menggunakan metadata sebagai evidence isi produk.\\n\\n` +
-      ANALYSIS_PROMPT_SUMMARY;
-
-    let summary = '';
-
-    try {
-      summary = await callGeminiAPI(
-        fullText,
-        summaryInstruction,
-        'Anda adalah perangkum produk yang objektif. Gunakan transcript sebagai satu-satunya sumber isi review.'
-      );
-    } catch (err) {
-      console.error('❌ Gagal membuat summary:', err);
-      summary = 'Gagal menghasilkan ringkasan.';
-    }
-
-    // ==================================================
-    // 3. TAHAP 2 — EVIDENCE EXTRACTION + VALIDATION
-    // ==================================================
-
-    const evidenceChunks =
-      buildEvidenceChunks(
-        segments,
-        18000,
-        3
-      );
-
-    console.log(
-      `📦 Evidence extraction akan menggunakan ${evidenceChunks.length} chunk.`
-    );
-
-    let allEvidence: EvidenceItem[] = [];
-
-    let quarantineSequence = 0;
-    
-    const quarantinedEvidence: Array<{
-      evidence: EvidenceItem;
-      reason?: string;
-      chunkIndex: number;
-    }> = [];
-
-    for (
-      let chunkIndex = 0;
-      chunkIndex < evidenceChunks.length;
-      chunkIndex++
-    ) {
-      const chunk = evidenceChunks[chunkIndex];
-
-      const batchNumber = chunkIndex + 1;
-      const totalBatches = evidenceChunks.length;
-
-      console.log(
-        `📦 Mengekstrak Chunk Evidence ke-${batchNumber}/${totalBatches} ` +
-        `(segment ${chunk[0].index}-${chunk[chunk.length - 1].index})...`
-      );
-
-      const chunkText = buildChunkText(chunk);
-
-      const evidenceInstruction = buildEvidenceInstruction(
-        metadata,
-        reviewerName,
-        batchNumber,
-        totalBatches
-      );
-
-      try {
-        const rawOutput = await callGeminiAPI(
-          chunkText,
-          evidenceInstruction,
-          PRODUCTION_SYSTEM_INSTRUCTION_EVIDENCE
-        );
-
-        // 🔥 ADD THIS FOR DEBUGGING
-        console.log(`[CHUNK ${batchNumber}] RAW_OUTPUT:`, JSON.stringify({
-          chunkIndex,
-          chunkText: chunkText.substring(0, 200) + '...',
-          rawOutput: rawOutput.substring(0, 1000) + '...',
-          timestamp: new Date().toISOString()
-        }));
-        // ... End DEBUGGING
-
-        const chunkEvidence = parseEvidenceJSON(rawOutput);
-        const validEvidence = chunkEvidence.filter(isValidEvidence);
-
-        if (validEvidence.length === 0) {
-          console.log(
-            `⚠️ Chunk ke-${batchNumber} tidak menghasilkan evidence valid.`
-          );
-          continue;
-        }
-
-        for (const ev of validEvidence) {
-          const context: EvidenceContext = {
-            chunkIndex,
-            chunkText,
-            chunkSegments: chunk
-          };
-
-          const report: EvidenceValidationReport =
-            EvidenceValidator.validate(ev, context);
-
-          if (report.accepted) {
-            allEvidence.push({
-              ...ev,
-              validation: report
-            });
-          } else {
-            quarantineSequence++;
-
-            quarantinedEvidence.push({
-              evidence: {
-                ...ev,
-                evidence_id: `Q${String(quarantineSequence).padStart(3, '0')}`
-              },
-              reason: report.quarantineReason,
-              chunkIndex
-            });
-          }
-        }
-
-        console.log(
-          `✅ Chunk ke-${batchNumber} berhasil menambah evidence valid. ` +
-          `Total sementara: ${allEvidence.length}. ` +
-          `Quarantine: ${quarantinedEvidence.length}.`
-        );
-      } catch (err) {
-        console.error(`❌ Gagal memproses Chunk ke-${batchNumber}:`, err);
-        continue;
-      }
-    }
-
-    if (quarantinedEvidence.length > 0) {
-      console.warn(
-        `🚫 Total evidence di-quarantine: ${quarantinedEvidence.length}`,
-        quarantinedEvidence.map(q => q.reason)
-      );
-    }
-
-    // ==================================================
-    // 4. ASSIGN EVIDENCE ID SEBELUM DUPLICATE GATE
-    // ==================================================
-
-    const identifiedEvidence = assignEvidenceIds(allEvidence);
-
-    console.log(
-      `🏷️ Evidence ID telah di-assign: ${identifiedEvidence.length} evidence.`
-    );
-
-    // ==================================================
-    // 5. DUPLICATE GATE (PHASE B) + SAVE DETAILS
-    // ==================================================
-
-    const duplicateResult = DuplicateValidator.detect(identifiedEvidence);
-    const {
-      preservedEvidence,
-      duplicateRemovedDetails,
-      duplicateMergedDetails
-    } = resolveDuplicateActions(identifiedEvidence, duplicateResult);
-
-    console.log(
-      `🧹 Duplicate gate selesai: ${identifiedEvidence.length} -> ${preservedEvidence.length}`
-    );
-
-    // ==================================================
-    // 6. TIMESTAMP + SOURCE + FINAL OUTPUT
-    // ==================================================
-
-    const finalEvidence = preservedEvidence.map(ev => {
-      const timestamp = ev.source_coordinates
-        ? getTimestampFromCoordinates(ev.source_coordinates, segments)
-        : {
-            timestamp_start: null,
-            timestamp_end: null
-          };
-
-      return {
-        ...ev,
-        timestamp_start: timestamp.timestamp_start,
-        timestamp_end: timestamp.timestamp_end,
-        source: resolvedReviewerName,
-        review_id: metadata.id ?? null,
-        video_url: metadata.url ?? null,
-        video_title: metadata.title ?? null
-      };
-    });
-
-    console.log(
-      `✅ Total final evidence: ${finalEvidence.length}`
-    );
-    // Tambah di server.ts sebelum res.json() line 598:
-console.log(JSON.stringify({
-  phase: 'FINAL_STATS',
-  totalExtracted: identifiedEvidence.length,
-  afterValidation: allEvidence.length, // before dedup
-  quarantined: quarantinedEvidence.length,
-  duplicateRemoved: duplicateRemovedDetails.length,
-  duplicateMerged: duplicateMergedDetails.length,
-  finalCount: finalEvidence.length,
-  // DEBUG: detail setiap kandidat duplicate
-  duplicateCandidates: duplicateResult.candidates.map(c => ({
-    idA: c.evidenceA.evidence_id,
-    idB: c.evidenceB.evidence_id,
-    similarity: c.similarity,
-    reasons: c.reasons
-  }))
-}, null, 2));
-    
-    // ==================================================
-    // 7. RESPONSE + STATS
-    // ==================================================
-    // const duplicateRemoved = identifiedEvidence.length - preservedEvidence.length;
-    // Dihitung dari duplicateRemovedDetails.length (bukan selisih total),
-    // supaya MERGE tidak ikut terhitung sebagai "removed" -- lihat
-    // rangkuman audit bagian 11.3/11.4 #7 untuk konteks kenapa field ini
-    // sebelumnya menyesatkan (2 evidence -> 1 hasil MERGE dulu dilaporkan
-    // sebagai "1 removed", padahal tidak ada informasi yang hilang).
-    const duplicateRemoved = duplicateRemovedDetails.length;
+    // Panggil kedua fungsi secara paralel (lebih cepat)
+    const [summary, evidenceResult] = await Promise.all([
+      generateSummary(srtContent, metadata, reviewerName),
+      extractEvidence(srtContent, metadata, reviewerName)
+    ]);
 
     return res.json({
       success: true,
       metadata,
       summary,
-      evidence: finalEvidence,
-      quarantine: quarantinedEvidence,
-      duplicateRemoved: duplicateRemovedDetails,
-      duplicateMerged: duplicateMergedDetails,
-      stats: {
-        totalExtracted: identifiedEvidence.length,
-        duplicateRemoved,
-        mergedCount: duplicateMergedDetails.length,
-        finalCount: finalEvidence.length,
-        quarantineCount: quarantinedEvidence.length
-      }
+      evidence: evidenceResult.evidence,
+      quarantine: evidenceResult.quarantine,
+      duplicateRemoved: evidenceResult.duplicateRemoved,
+      duplicateMerged: evidenceResult.duplicateMerged,
+      stats: evidenceResult.stats
     });
 
   } catch (error: any) {
@@ -648,6 +525,42 @@ console.log(JSON.stringify({
     return res.status(500).json({
       error: error?.message || 'Terjadi kesalahan pada server.'
     });
+  }
+});
+
+// ==========================================
+// ENDPOINT: GENERATE SUMMARY SAJA
+// ==========================================
+app.post('/api/summary', async (req, res) => {
+  try {
+    const { srtContent, metadata = {}, reviewerName = 'Reviewer' } = req.body;
+    if (!srtContent || typeof srtContent !== 'string') {
+      return res.status(400).json({ error: 'srtContent wajib diisi dan berupa string.' });
+    }
+
+    const summary = await generateSummary(srtContent, metadata, reviewerName);
+    res.json({ success: true, summary });
+  } catch (error: any) {
+    console.error('❌ Error di /api/summary:', error);
+    res.status(500).json({ error: error.message || 'Terjadi kesalahan pada server.' });
+  }
+});
+
+// ==========================================
+// ENDPOINT: EXTRACT EVIDENCE SAJA
+// ==========================================
+app.post('/api/evidence', async (req, res) => {
+  try {
+    const { srtContent, metadata = {}, reviewerName = 'Reviewer' } = req.body;
+    if (!srtContent || typeof srtContent !== 'string') {
+      return res.status(400).json({ error: 'srtContent wajib diisi dan berupa string.' });
+    }
+
+    const result = await extractEvidence(srtContent, metadata, reviewerName);
+    res.json({ success: true, ...result });
+  } catch (error: any) {
+    console.error('❌ Error di /api/evidence:', error);
+    res.status(500).json({ error: error.message || 'Terjadi kesalahan pada server.' });
   }
 });
 
