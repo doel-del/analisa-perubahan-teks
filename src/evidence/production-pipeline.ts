@@ -143,13 +143,9 @@ export function buildEvidenceChunks(
   return chunks;
 }
 
+// production-pipeline.ts
 export function buildChunkText(chunk: SRTSegment[]): string {
-  return chunk
-    .map(
-      segment =>
-        `${segment.index}\n${segment.start} --> ${segment.end}\n${segment.text}`
-    )
-    .join('\n\n');
+  return chunk.map(segment => segment.text).join(' ');
 }
 
 // ============================================================
