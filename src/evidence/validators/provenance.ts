@@ -51,7 +51,7 @@ export const ProvenanceValidator = {
       };
     }
 
-    // Ambiguous: lebih dari satu occurrence
+    // Ambiguous → SUSPECT (bukan FAIL)
     return {
       coordinates: null,
       result: {
@@ -59,7 +59,7 @@ export const ProvenanceValidator = {
         status: 'SUSPECT',
         rule: 'PROVENANCE',
         reason: 'source_excerpt ambiguous, lebih dari satu kemungkinan occurrence',
-        severity: 'MEDIUM'
+        severity: 'HIGH'
       }
     };
   }
