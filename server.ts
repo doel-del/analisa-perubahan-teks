@@ -40,7 +40,7 @@ import { callLLMAPI, callLLMWithFallback, getActiveProvider } from './src/llm/ll
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 app.use(express.json({ limit: '10mb' }));
 
 // ==========================================
@@ -84,8 +84,6 @@ function safeReadJSON(filePath: string): Record<string, string> {
 // ==========================================
 // 3. HELPER AI FUNCTIONS — SUDAH DIGANTI DENGAN UNIFIED LLM PROVIDER
 // ==========================================
-// Fungsi callGeminiAPI dan callGroqAPI lokal telah dihapus,
-// karena semua panggilan LLM menggunakan src/llm/llm-provider.ts
 
 // ==========================================
 // FUNGSI GENERATE SUMMARY (TERPISAH)
@@ -111,12 +109,13 @@ async function generateSummary(
     `Jangan menggunakan metadata sebagai evidence isi produk.\n\n` +
     ANALYSIS_PROMPT_SUMMARY;
 
+  // Primary = gemini, fallback = groq
   const result = await callLLMWithFallback(
     fullText,
     summaryInstruction,
     'Anda adalah perangkum produk yang objektif. Gunakan transcript sebagai satu-satunya sumber isi review.',
-    getActiveProvider(),
-    ['deepseek', 'gemini']
+    'gemini',
+    ['groq']
   );
 
   if (!result.success) {
@@ -154,8 +153,8 @@ async function extractEvidence(
   const resolvedReviewerName = getReviewerName(metadata, reviewerName);
   const metadataContext = buildMetadataContext(metadata);
 
-  // Chunking
-  const evidenceChunks = buildEvidenceChunks(segments, 18000, 3);
+  // Chunking dengan ukuran lebih kecil (8000 karakter) dan overlap 2 segmen
+  const evidenceChunks = buildEvidenceChunks(segments, 8000, 2);
   console.log(`📦 Evidence extraction akan menggunakan ${evidenceChunks.length} chunk.`);
 
   let allEvidence: EvidenceItem[] = [];
@@ -174,7 +173,21 @@ async function extractEvidence(
 
     console.log(`📦 Mengekstrak Chunk Evidence ke-${batchNumber}/${totalBatches} ...`);
 
+    // 🔥 LOG RENTANG SEGMEN
+    const firstSegment = chunk[0];
+    const lastSegment = chunk[chunk.length - 1];
+    const totalSegments = chunk.length;
+    console.log(
+      `   📍 Segmen ${firstSegment.index} → ${lastSegment.index} ` +
+      `(${firstSegment.start} → ${lastSegment.end})`
+    );
+    console.log(`   📏 Jumlah segmen: ${totalSegments}`);
+
+    // 🔥 BUILD CHUNK TEXT DAN HITUNG KARAKTER
     const chunkText = buildChunkText(chunk);
+    const charLength = chunkText.length;
+    console.log(`📏 Chunk ${batchNumber} - Karakter: ${charLength}, Estimasi Token: ~${Math.ceil(charLength / 4)}`);
+
     const evidenceInstruction = buildEvidenceInstruction(
       metadata,
       reviewerName,
@@ -187,8 +200,8 @@ async function extractEvidence(
         chunkText,
         evidenceInstruction,
         PRODUCTION_SYSTEM_INSTRUCTION_EVIDENCE,
-        getActiveProvider(),
-        ['deepseek', 'gemini']
+        'gemini',
+        ['groq']
       );
 
       if (!result.success) {
@@ -235,6 +248,12 @@ async function extractEvidence(
     } catch (err) {
       console.error(`❌ Gagal memproses Chunk ke-${batchNumber}:`, err);
       continue;
+    }
+
+    // Jeda 5 detik agar tidak kena rate limit Groq (meskipun primary gemini, fallback tetap groq)
+    if (chunkIndex < evidenceChunks.length - 1) {
+      console.log(`⏳ Menunggu 5 detik sebelum chunk berikutnya...`);
+      await new Promise(resolve => setTimeout(resolve, 5000));
     }
   }
 
@@ -299,12 +318,11 @@ app.post('/api/correct-text', async (req, res) => {
     let promptInstruction = '';
     const systemInstruction = `Anda adalah ahli penyunting tata bahasa...`;
     try {
-      // Gunakan unified LLM provider
       const result = await callLLMAPI(
         text,
         promptInstruction,
         systemInstruction,
-        getActiveProvider() // provider dari env atau default 'groq'
+        getActiveProvider()
       );
       if (!result.success) throw new Error(result.error);
       const correctedText = result.content;
@@ -390,12 +408,8 @@ function getTimestampFromCoordinates(
   };
 }
 
-
-
 // --------------------------------------------------
-// RESOLUSI DUPLICATE GATE — diekstrak dari route handler supaya
-// bisa diuji terpisah (smoke test) tanpa perlu Express/network call.
-// PERILAKU TIDAK BERUBAH dari kode inline sebelumnya, cuma dipindah.
+// RESOLUSI DUPLICATE GATE
 // --------------------------------------------------
 
 export interface DuplicateResolutionOutput {
@@ -454,7 +468,6 @@ export function resolveDuplicateActions(
     let keptId: string | null = null;
 
     if (resolution.action === 'KEEP_BEST') {
-      // Coba tentukan mana yang dipertahankan berdasarkan reason dari LLM
       const lower = resolution.reason.toLowerCase();
       if (lower.includes('a lebih') || lower.includes('a memiliki')) {
         keptId = resolution.evidence_id_a;
@@ -463,7 +476,6 @@ export function resolveDuplicateActions(
         keptId = resolution.evidence_id_b;
         evidenceIdToRemove = resolution.evidence_id_a;
       } else {
-        // Fallback: jika tidak ada indikasi, hapus B (karena A adalah yang pertama)
         keptId = resolution.evidence_id_a;
         evidenceIdToRemove = resolution.evidence_id_b;
       }
@@ -476,7 +488,7 @@ export function resolveDuplicateActions(
       removedEvidenceIds.add(evidenceIdToRemove);
       duplicateRemovedDetails.push({
         evidence_id: evidenceIdToRemove,
-        reason: resolution.reason, // Gunakan alasan asli dari LLM
+        reason: resolution.reason,
         kept_evidence_id: keptId || '',
       });
     }
@@ -490,7 +502,7 @@ export function resolveDuplicateActions(
 }
 
 // --------------------------------------------------
-// ANALYZE REVIEW
+// ANALYZE REVIEW (Endpoint utama)
 // --------------------------------------------------
 
 app.post('/api/analyze-review', async (req, res) => {
@@ -503,7 +515,6 @@ app.post('/api/analyze-review', async (req, res) => {
       });
     }
 
-    // Panggil kedua fungsi secara paralel (lebih cepat)
     const [summary, evidenceResult] = await Promise.all([
       generateSummary(srtContent, metadata, reviewerName),
       extractEvidence(srtContent, metadata, reviewerName)
@@ -579,15 +590,6 @@ async function startServer() {
   app.listen(PORT, '0.0.0.0', () => console.log(`Server running on http://0.0.0.0:${PORT}`));
 }
 
-// Guard: startServer() hanya dijalankan di luar konteks test.
-// Vitest otomatis men-set process.env.VITEST saat menjalankan test
-// suite -- ini dipakai di sini (bukan perbandingan import.meta.url
-// vs process.argv[1]) karena perbandingan URL/path rawan bug
-// platform-dependent di Windows (drive letter encoding di file://,
-// backslash vs forward-slash). Tanpa guard ini, meng-import server.ts
-// untuk keperluan test akan ikut men-start Express server + vite
-// middleware sebagai side effect yang tidak diinginkan (bentrok port,
-// proses menggantung, dsb).
 if (!process.env.VITEST) {
   startServer();
 }
