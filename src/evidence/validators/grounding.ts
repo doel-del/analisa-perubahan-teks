@@ -34,12 +34,14 @@ export const GroundingValidator = {
       };
     }
 
+    // Multiple matches → SUSPECT (bukan FAIL)
+    // Orchestrator akan memblokir ini karena severity HIGH
     return {
       pass: true,
       status: 'SUSPECT',
       rule: 'GROUNDING',
-      reason: 'source_excerpt muncul lebih dari satu kali di chunk',
-      severity: 'MEDIUM'
+      reason: 'source_excerpt muncul lebih dari satu kali di chunk (ambiguous)',
+      severity: 'HIGH'
     };
   }
 };
