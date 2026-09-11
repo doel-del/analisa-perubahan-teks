@@ -1,5 +1,9 @@
 // ============================================================
-// GROUNDING VALIDATOR
+// GROUNDING VALIDATOR — existence only (pasca-redesign)
+// ============================================================
+// Keberadaan >1 match BUKAN urusan Grounding. Ambiguitas adalah
+// domain Provenance. Grounding tidak lagi pernah mengembalikan
+// SUSPECT.
 // ============================================================
 
 import type {
@@ -25,23 +29,11 @@ export const GroundingValidator = {
       };
     }
 
-    if (matches.length === 1) {
-      return {
-        pass: true,
-        status: 'PASS',
-        rule: 'GROUNDING',
-        severity: 'LOW'
-      };
-    }
-
-    // Multiple matches → SUSPECT (bukan FAIL)
-    // Orchestrator akan memblokir ini karena severity HIGH
     return {
       pass: true,
-      status: 'SUSPECT',
+      status: 'PASS',
       rule: 'GROUNDING',
-      reason: 'source_excerpt muncul lebih dari satu kali di chunk (ambiguous)',
-      severity: 'HIGH'
+      severity: 'LOW'
     };
   }
 };
