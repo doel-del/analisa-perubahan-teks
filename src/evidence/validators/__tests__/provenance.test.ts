@@ -13,7 +13,7 @@ const context: EvidenceContext = {
 
 describe('PROVENANCE VALIDATOR', () => {
   test('PASS: single segment', () => {
-    const result = ProvenanceValidator.resolve('baterainya habis setelah', context);
+    const result = ProvenanceValidator.resolve('baterainya habis setelah', null, context);
     expect(result.result.status).toBe('PASS');
     expect(result.coordinates).toEqual({
       chunk_index: 0,
@@ -27,6 +27,7 @@ describe('PROVENANCE VALIDATOR', () => {
   test('PASS: cross-segment', () => {
     const result = ProvenanceValidator.resolve(
       'baterainya habis setelah 17 jam 42 menit',
+      null,
       context
     );
     expect(result.result.status).toBe('PASS');
@@ -40,7 +41,7 @@ describe('PROVENANCE VALIDATOR', () => {
   });
 
   test('FAIL: missing', () => {
-    const result = ProvenanceValidator.resolve('tidak ada', context);
+    const result = ProvenanceValidator.resolve('tidak ada', null, context);
     expect(result.result.status).toBe('FAIL');
     expect(result.coordinates).toBeNull();
   });
@@ -54,7 +55,7 @@ describe('PROVENANCE VALIDATOR', () => {
         { index: 2, start: '00:00:02,000', end: '00:00:03,000', text: '6 generasi Android' }
       ]
     };
-    const result = ProvenanceValidator.resolve('6 generasi Android', ambiguousContext);
+    const result = ProvenanceValidator.resolve('6 generasi Android', null, ambiguousContext);
     expect(result.result.status).toBe('SUSPECT');
     expect(result.coordinates).toBeNull();
   });
