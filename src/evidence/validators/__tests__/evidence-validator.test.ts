@@ -2,67 +2,191 @@ import { describe, test, expect } from 'vitest';
 import { EvidenceValidator } from '../evidence-validator';
 import type { EvidenceContext, EvidenceItem } from '../../types';
 
-const context: EvidenceContext = {
+// ============================================================
+// TEST DATA — 5 EVIDENCE TANPA COORDINATES (E053, E054, E055, E062, E064)
+// ============================================================
+
+// Context yang mensimulasikan chunk dengan kedua kemunculan source_excerpt
+const chunkSegmentsAmbiguous = [
+  // Segment 96 — untuk kamera selfie
+  {
+    index: 96,
+    start: '00:05:15,569',
+    end: '00:05:20,569',
+    text: 'Ini adalah kamera selfie 13 MP, bukaan f/2.2, fixed focus.'
+  },
+  // Segment 97 — untuk perekaman video selfie
+  {
+    index: 97,
+    start: '00:05:20,569',
+    end: '00:05:24,129',
+    text: 'Perekaman videonya up to 1080p 30 fps.'
+  },
+  // Segment 101 — untuk kamera ultrawide
+  {
+    index: 101,
+    start: '00:05:35,089',
+    end: '00:05:40,050',
+    text: 'Kemudian untuk kamera berikutnya ada kamera ultrawide 8 MP, bukaan f/2.2.'
+  },
+  // Segment 102 — untuk perekaman video ultrawide
+  {
+    index: 102,
+    start: '00:05:40,050',
+    end: '00:05:44,370',
+    text: 'Ini fixed focus juga ya, perekaman videonya up to 1080p 30 fps.'
+  }
+];
+
+const ambiguousContext: EvidenceContext = {
   chunkIndex: 0,
-  chunkText: 'Segment 1: Refresh rate 120Hz',
-  chunkSegments: [
-    { index: 1, start: '00:00:01,000', end: '00:00:02,000', text: 'Refresh rate 120Hz' }
-  ]
+  chunkText: chunkSegmentsAmbiguous.map(s => s.text).join('\n'),
+  chunkSegments: chunkSegmentsAmbiguous
 };
 
-describe('EVIDENCE VALIDATOR', () => {
-  test('PASS: valid evidence', () => {
-    const evidence: EvidenceItem = {
-      type: 'FACT',
-      claim: 'Refresh rate 120Hz',
-      source_excerpt: 'Refresh rate 120Hz',
-      reviewer_assessment: null
-    };
-    const report = EvidenceValidator.validate(evidence, context);
-    expect(report.accepted).toBe(true);
-    expect(evidence.source_coordinates).not.toBeNull();
-  });
+describe('EVIDENCE VALIDATOR — 5 evidence tanpa coordinates', () => {
 
-  test('FAIL: ungrounded evidence', () => {
+  // ============================================================
+  // E053 — Bukaan lensa kamera selfie f/2.2
+  // ============================================================
+  test('E053: bukaan f/2.2 (selfie) → ambiguous → QUARANTINE', () => {
     const evidence: EvidenceItem = {
       type: 'FACT',
-      claim: 'Baterai 5000 mAh',
-      source_excerpt: 'tidak ada di chunk',
-      reviewer_assessment: null
+      claim: 'Bukaan lensa kamera selfie adalah f/2.2',
+      value: 2.2,
+      unit: 'f',
+      context: 'Spesifikasi kamera depan',
+      source_excerpt: 'bukaan f/2.2',
+      reviewer_assessment: null,
+      certainty: 'explicit'
     };
-    const report = EvidenceValidator.validate(evidence, context);
+
+    const report = EvidenceValidator.validate(evidence, ambiguousContext);
+
+    // Harus ditolak karena grounding/provenance ambiguous
     expect(report.accepted).toBe(false);
+    expect(report.finalStatus).toBe('QUARANTINE');
     expect(evidence.source_coordinates).toBeNull();
+    expect(report.quarantineReason).toMatch(/GROUNDING|PROVENANCE/);
   });
 
-  test('FAIL: assessment violation', () => {
+  // ============================================================
+  // E054 — fixed focus (selfie)
+  // ============================================================
+  test('E054: fixed focus (selfie) → ambiguous → QUARANTINE', () => {
     const evidence: EvidenceItem = {
       type: 'FACT',
-      claim: 'Refresh rate 120Hz',
-      source_excerpt: 'Refresh rate 120Hz',
-      reviewer_assessment: 'positive'
+      claim: 'Kamera selfie menggunakan sistem fixed focus',
+      value: null,
+      unit: null,
+      context: 'Spesifikasi fokus kamera depan',
+      source_excerpt: 'fixed focus',
+      reviewer_assessment: null,
+      certainty: 'explicit'
     };
-    const report = EvidenceValidator.validate(evidence, context);
+
+    const report = EvidenceValidator.validate(evidence, ambiguousContext);
+
     expect(report.accepted).toBe(false);
+    expect(report.finalStatus).toBe('QUARANTINE');
+    expect(evidence.source_coordinates).toBeNull();
+    expect(report.quarantineReason).toMatch(/GROUNDING|PROVENANCE/);
   });
 
-  test('SUSPECT: ambiguous grounding', () => {
-    const ambiguousContext: EvidenceContext = {
+  // ============================================================
+  // E055 — Perekaman video selfie 1080p 30 fps
+  // ============================================================
+  test('E055: perekaman video selfie 1080p 30 fps → ambiguous → QUARANTINE', () => {
+    const evidence: EvidenceItem = {
+      type: 'FACT',
+      claim: 'Perekaman video kamera selfie mendukung hingga 1080p 30 fps',
+      value: '1080p 30 fps',
+      unit: null,
+      context: 'Kemampuan perekaman video kamera depan',
+      source_excerpt: 'Perekaman videonya up to 1080p 30 fps',
+      reviewer_assessment: null,
+      certainty: 'explicit'
+    };
+
+    const report = EvidenceValidator.validate(evidence, ambiguousContext);
+
+    expect(report.accepted).toBe(false);
+    expect(report.finalStatus).toBe('QUARANTINE');
+    expect(evidence.source_coordinates).toBeNull();
+    expect(report.quarantineReason).toMatch(/GROUNDING|PROVENANCE/);
+  });
+
+  // ============================================================
+  // E062 — Bukaan lensa kamera ultrawide f/2.2
+  // ============================================================
+  test('E062: bukaan f/2.2 (ultrawide) → ambiguous → QUARANTINE', () => {
+    const evidence: EvidenceItem = {
+      type: 'FACT',
+      claim: 'Bukaan lensa kamera ultrawide adalah f/2.2',
+      value: 2.2,
+      unit: 'f',
+      context: 'Spesifikasi kamera ultrawide',
+      source_excerpt: 'bukaan f/2.2',
+      reviewer_assessment: null,
+      certainty: 'explicit'
+    };
+
+    const report = EvidenceValidator.validate(evidence, ambiguousContext);
+
+    expect(report.accepted).toBe(false);
+    expect(report.finalStatus).toBe('QUARANTINE');
+    expect(evidence.source_coordinates).toBeNull();
+    expect(report.quarantineReason).toMatch(/GROUNDING|PROVENANCE/);
+  });
+
+  // ============================================================
+  // E064 — Perekaman video ultrawide 1080p 30 fps
+  // ============================================================
+  test('E064: perekaman video ultrawide 1080p 30 fps → ambiguous → QUARANTINE', () => {
+    const evidence: EvidenceItem = {
+      type: 'FACT',
+      claim: 'Perekaman video kamera ultrawide mendukung hingga 1080p 30 fps',
+      value: '1080p 30 fps',
+      unit: null,
+      context: 'Kemampuan perekaman video kamera ultrawide',
+      source_excerpt: 'perekaman videonya up to 1080p 30 fps',
+      reviewer_assessment: null,
+      certainty: 'explicit'
+    };
+
+    const report = EvidenceValidator.validate(evidence, ambiguousContext);
+
+    expect(report.accepted).toBe(false);
+    expect(report.finalStatus).toBe('QUARANTINE');
+    expect(evidence.source_coordinates).toBeNull();
+    expect(report.quarantineReason).toMatch(/GROUNDING|PROVENANCE/);
+  });
+
+  // ============================================================
+  // TEST KONTROL — Evidence dengan source_excerpt unik tetap lolos
+  // ============================================================
+  test('KONTROL: source_excerpt unik → accepted=true', () => {
+    const uniqueContext: EvidenceContext = {
       chunkIndex: 0,
-      chunkText: '6 generasi Android\n6 generasi Android',
+      chunkText: 'Baterai 5000 mAh',
       chunkSegments: [
-        { index: 1, start: '00:00:01,000', end: '00:00:02,000', text: '6 generasi Android' },
-        { index: 2, start: '00:00:02,000', end: '00:00:03,000', text: '6 generasi Android' }
+        { index: 1, start: '00:00:01,000', end: '00:00:02,000', text: 'Baterai 5000 mAh' }
       ]
     };
     const evidence: EvidenceItem = {
       type: 'FACT',
-      claim: '6 generasi Android',
-      source_excerpt: '6 generasi Android',
-      reviewer_assessment: null
+      claim: 'Kapasitas baterai 5000 mAh',
+      value: 5000,
+      unit: 'mAh',
+      source_excerpt: 'Baterai 5000 mAh',
+      reviewer_assessment: null,
+      certainty: 'explicit'
     };
-    const report = EvidenceValidator.validate(evidence, ambiguousContext);
+
+    const report = EvidenceValidator.validate(evidence, uniqueContext);
+
     expect(report.accepted).toBe(true);
-    expect(evidence.source_coordinates).toBeNull();
+    expect(report.finalStatus).toBe('VALID');
+    expect(evidence.source_coordinates).not.toBeNull();
   });
 });
