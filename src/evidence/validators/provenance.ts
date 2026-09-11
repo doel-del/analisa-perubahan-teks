@@ -1,6 +1,16 @@
 // ============================================================
 // PROVENANCE VALIDATOR
 // ============================================================
+// Tanggung jawab:
+//   1. Menentukan existence (via findSourceMatches) → FAIL jika 0.
+//   2. Mendelegasikan occurrence disambiguation ke
+//      resolveProvenanceAnchor() → RESOLVED / AMBIGUOUS.
+//
+// Resolver internal sengaja TIDAK menangani FAIL — status-nya
+// hanya RESOLVED | AMBIGUOUS (dikunci audit Ronde 3). FAIL
+// dibangun di sini dari sinyal existence, karena "existence" adalah
+// domain findSourceMatches / Grounding, bukan domain resolver.
+// ============================================================
 
 import type {
   EvidenceContext,
@@ -8,15 +18,19 @@ import type {
   ValidationResult
 } from '../types';
 import { findSourceMatches } from '../search';
+import { resolveProvenanceAnchor } from './anchor-resolver';
 
 export const ProvenanceValidator = {
   resolve(
     sourceExcerpt: string | null | undefined,
+    anchor: string | null | undefined,
     context: EvidenceContext
   ): {
     coordinates: SourceCoordinates | null;
     result: ValidationResult;
   } {
+    // Existence gate. Bukan tanggung jawab resolver — resolver
+    // berasumsi candidate set sudah non-empty ketika dipanggil.
     const matches = findSourceMatches(sourceExcerpt, context);
 
     if (matches.length === 0) {
@@ -32,34 +46,34 @@ export const ProvenanceValidator = {
       };
     }
 
-    if (matches.length === 1) {
-      const match = matches[0];
+    // Occurrence disambiguation. ≥1 match di sini.
+    const resolution = resolveProvenanceAnchor(
+      sourceExcerpt,
+      anchor,
+      context
+    );
+
+    if (resolution.status === 'AMBIGUOUS') {
       return {
-        coordinates: {
-          chunk_index: context.chunkIndex,
-          segment_start_index: match.segmentStartIndex,
-          segment_end_index: match.segmentEndIndex,
-          char_start: null,
-          char_end: null
-        },
+        coordinates: null,
         result: {
           pass: true,
-          status: 'PASS',
+          status: 'SUSPECT',
           rule: 'PROVENANCE',
-          severity: 'LOW'
+          reason: 'source_excerpt ambiguous, lebih dari satu kemungkinan occurrence',
+          severity: 'HIGH'
         }
       };
     }
 
-    // Ambiguous → SUSPECT (bukan FAIL)
+    // resolution.status === 'RESOLVED'
     return {
-      coordinates: null,
+      coordinates: resolution.coordinates,
       result: {
         pass: true,
-        status: 'SUSPECT',
+        status: 'PASS',
         rule: 'PROVENANCE',
-        reason: 'source_excerpt ambiguous, lebih dari satu kemungkinan occurrence',
-        severity: 'HIGH'
+        severity: 'LOW'
       }
     };
   }
