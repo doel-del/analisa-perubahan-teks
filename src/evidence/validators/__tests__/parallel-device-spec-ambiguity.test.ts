@@ -98,19 +98,19 @@ describe('PARALLEL_DEVICE_SPEC_AMBIGUITY — bukti gap (belum diperbaiki)', () =
     });
   });
 
-  // ============================================================
+    // ============================================================
   // BAGIAN B — ProvenanceValidator: coordinates gagal ter-resolve
   // ============================================================
   describe('B. ProvenanceValidator gagal resolve coordinates untuk kasus yang sama', () => {
 
     test('BUG: "bukaan f/2.2" → coordinates null, status SUSPECT', () => {
-      const result = ProvenanceValidator.resolve('bukaan f/2.2', context);
+      const result = ProvenanceValidator.resolve('bukaan f/2.2', null, context);
       expect(result.coordinates).toBeNull();
       expect(result.result.status).toBe('SUSPECT');
     });
 
     test('BUG: "fixed focus" → coordinates null, status SUSPECT', () => {
-      const result = ProvenanceValidator.resolve('fixed focus', context);
+      const result = ProvenanceValidator.resolve('fixed focus', null, context);
       expect(result.coordinates).toBeNull();
       expect(result.result.status).toBe('SUSPECT');
     });
