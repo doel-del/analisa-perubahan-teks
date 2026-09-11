@@ -22,16 +22,17 @@ export const EvidenceValidator = {
   ): EvidenceValidationReport {
     const results: ValidationResult[] = [];
 
-    // 1. Grounding
+    // 1. Grounding — existence only
     const groundingResult = GroundingValidator.validate(
       evidence.source_excerpt,
       context
     );
     results.push(groundingResult);
 
-    // 2. Provenance
+    // 2. Provenance — resolve menggunakan evidence.subtopic sebagai anchor
     const provenanceResult = ProvenanceValidator.resolve(
       evidence.source_excerpt,
+      evidence.subtopic,
       context
     );
     results.push(provenanceResult.result);
@@ -53,10 +54,7 @@ export const EvidenceValidator = {
 
     // 4. Value
     results.push(
-      ValueValidator.validate(
-        evidence.value,
-        evidence.unit
-      )
+      ValueValidator.validate(evidence.value, evidence.unit)
     );
 
     // 5. Atomicity
@@ -78,7 +76,7 @@ export const EvidenceValidator = {
       return quarantine(evidence, results, `FAIL: ${failedReasons}`);
     }
 
-    // 2. SUSPECT dengan severity HIGH → quarantine
+    // 2. SUSPECT severity HIGH → quarantine
     const hasSuspectHigh = results.some(
       r => r.status === 'SUSPECT' && r.severity === 'HIGH'
     );
@@ -90,26 +88,25 @@ export const EvidenceValidator = {
       return quarantine(evidence, results, `SUSPECT HIGH: ${highReasons}`);
     }
 
-    // 3. GROUNDING atau PROVENANCE SUSPECT → quarantine (P0 invariant)
-    const hasGroundingSuspect = results.some(
-      r => r.rule === 'GROUNDING' && r.status === 'SUSPECT'
-    );
+    // 3. PROVENANCE SUSPECT → quarantine (P0 invariant)
+    //    GROUNDING pasca-redesign existence-only, tidak pernah SUSPECT.
     const hasProvenanceSuspect = results.some(
       r => r.rule === 'PROVENANCE' && r.status === 'SUSPECT'
     );
-    if (hasGroundingSuspect || hasProvenanceSuspect) {
-      const reasons = [];
-      if (hasGroundingSuspect) reasons.push('GROUNDING ambiguous (multiple matches)');
-      if (hasProvenanceSuspect) reasons.push('PROVENANCE ambiguous (multiple occurrences)');
-      return quarantine(evidence, results, `SUSPECT GROUNDING/PROVENANCE: ${reasons.join('; ')}`);
+    if (hasProvenanceSuspect) {
+      return quarantine(
+        evidence,
+        results,
+        'SUSPECT PROVENANCE: source_excerpt ambiguous (residual, tidak ter-resolve anchor)'
+      );
     }
 
-    // 4. ATOMICITY SUSPECT → accepted=true, tapi ditandai untuk atomicization
+    // 4. ATOMICITY SUSPECT → accepted=true, ditandai untuk atomicization
     const hasAtomicitySuspect = results.some(
       r => r.rule === 'ATOMICITY' && r.status === 'SUSPECT'
     );
 
-    // 5. VALUE SUSPECT → accepted=true, tapi perlu review (P1)
+    // 5. VALUE SUSPECT → accepted=true, perlu review (P1)
     const hasValueSuspect = results.some(
       r => r.rule === 'VALUE' && r.status === 'SUSPECT'
     );
@@ -138,7 +135,6 @@ export const EvidenceValidator = {
   }
 };
 
-// Helper untuk quarantine dengan konsistensi
 function quarantine(
   evidence: EvidenceItem,
   results: ValidationResult[],
