@@ -32,7 +32,11 @@ describe('GROUNDING VALIDATOR', () => {
     expect(result.severity).toBe('CRITICAL');
   });
 
-  test('SUSPECT: ambiguous occurrence', () => {
+  test('PASS: duplicate occurrence (existence-only pasca Stage 5)', () => {
+    // Kontrak Grounding saat ini: 0 occurrence → FAIL, ≥1 occurrence → PASS.
+    // Duplicate occurrence BUKAN lagi SUSPECT di Grounding -- ambiguitas
+    // occurrence adalah tanggung jawab Provenance (Stage 5 existence-only).
+    // Lihat juga parallel-device-spec-ambiguity.test.ts Bagian A.
     const ambiguousContext: EvidenceContext = {
       chunkIndex: 0,
       chunkText: '6 generasi Android\n6 generasi Android',
@@ -42,6 +46,7 @@ describe('GROUNDING VALIDATOR', () => {
       ]
     };
     const result = GroundingValidator.validate('6 generasi Android', ambiguousContext);
-    expect(result.status).toBe('SUSPECT');
+    expect(result.status).toBe('PASS');
+    expect(result.severity).toBe('LOW');
   });
 });
