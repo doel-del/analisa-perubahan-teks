@@ -1,34 +1,34 @@
 // ============================================================
-// REGRESSION TEST (CALON) — PARALLEL_DEVICE_SPEC_AMBIGUITY
+// REGRESSION TEST — PARALLEL_DEVICE_SPEC_AMBIGUITY
 // ============================================================
-// Tujuan: membuktikan gap GROUNDING/PROVENANCE yang ditemukan dari
+// Tujuan: mengunci bahwa gap GROUNDING/PROVENANCE yang ditemukan dari
 // log production (Test Gemini temperature 0.0, Chunk #2, kategori
-// kuarantine "Ambiguous") -- BUKAN reimplementasi logika, memanggil
-// GroundingValidator, ProvenanceValidator, dan EvidenceValidator
-// production ASLI.
+// kuarantine "Ambiguous") SUDAH DIPERBAIKI lewat redesign:
 //
-// AKAR MASALAH (hipotesis yang diuji di sini):
-// findSourceMatches() (search.ts) mencari kecocokan literal SECARA
-// GLOBAL di seluruh chunk, tanpa mempertimbangkan urutan/posisi
-// relatif terhadap subjek yang disebut evidence. Ketika dua device
-// paralel (kamera selfie vs ultrawide) dideskripsikan dengan frasa
-// spesifikasi template yang literal identik ("bukaan f/2.2",
-// "fixed focus", "up to 1080p 30 fps" -- masing-masing muncul PERSIS
-// 2x di chunk yang sama, sekali per device), validator otomatis
-// menganggap SEMUA excerpt pendek semacam itu ambigu, walau
-// evidence yang bersangkutan sebenarnya benar dan atomik.
+//   - GroundingValidator menjadi existence-only (Stage 5)
+//   - ProvenanceValidator menerima anchor (evidence.subtopic) dan
+//     mendelegasikan occurrence disambiguation ke anchor resolver
+//     (Stage 4)
+//   - EvidenceValidator meneruskan evidence.subtopic sebagai anchor
+//     (Stage 6)
+//
+// Sebelum redesign, excerpt template pendek ("bukaan f/2.2",
+// "fixed focus", "up to 1080p 30 fps") yang muncul PERSIS 2x di chunk
+// (sekali per device paralel selfie vs ultrawide) otomatis dianggap
+// ambigu → false quarantine.
+//
+// Setelah redesign, anchor (subtopic) memilih candidate span yang
+// tepat → provenance RESOLVED → evidence diterima.
+//
+// STATUS TEST INI: POSITIVE REGRESSION ASSERTION.
+// Test-test di Bagian A dan D meng-assert perilaku BENAR pasca-fix.
+// Bagian B tetap meng-assert jalur fail-safe (multiple occurrence +
+// tidak ada anchor → tetap AMBIGUOUS, tidak boleh menebak).
+// Bagian C adalah kontrol negatif untuk excerpt yang memang spesifik.
 //
 // FIXTURE: segmen 95-103 disalin verbatim dari
 // "INPUT External/transcript.srt" (Samsung Galaxy A26 5G review).
 // chunkIndex/timestamps dipertahankan sesuai SRT asli.
-//
-// Status test ini: NEGATIVE ASSERTION. Test-test di bagian A dan B
-// SENGAJA meng-assert bug ADA (SUSPECT/quarantine), bukan assert
-// perilaku yang benar -- sama seperti pola D-13/smoke-shared-
-// predicate sebelumnya. Kalau nanti fix (Opsi A/B/C, belum
-// diputuskan) diimplementasikan, assertion di bagian A & B akan
-// GAGAL -- itu tandanya fix bekerja, dan assertion harus dibalik
-// saat itu terjadi.
 //
 // Tidak mengubah production code.
 // Tidak mengubah prompt.
@@ -70,46 +70,58 @@ const context: EvidenceContext = {
   ].join(' ')
 };
 
-describe('PARALLEL_DEVICE_SPEC_AMBIGUITY — bukti gap (belum diperbaiki)', () => {
+describe('PARALLEL_DEVICE_SPEC_AMBIGUITY — fix terverifikasi', () => {
 
   // ============================================================
-  // BAGIAN A — GroundingValidator: excerpt pendek template-sama
+  // BAGIAN A — GroundingValidator existence-only
   // ============================================================
-  describe('A. GroundingValidator salah menandai SUSPECT untuk excerpt valid', () => {
+  // Sebelum redesign: excerpt template pendek yang muncul >1x
+  // ditandai SUSPECT/HIGH oleh Grounding → memicu false quarantine.
+  //
+  // Setelah redesign: Grounding hanya cek existence. Keberadaan >1
+  // match bukan urusan Grounding — itu domain Provenance.
+  // ============================================================
+  describe('A. GroundingValidator existence-only: multiple match = PASS', () => {
 
-    test('BUG: "bukaan f/2.2" muncul di segmen 96 (selfie) DAN 101 (ultrawide) → SUSPECT HIGH', () => {
+    test('"bukaan f/2.2" muncul di segmen 96 (selfie) DAN 101 (ultrawide) → PASS', () => {
       const result = GroundingValidator.validate('bukaan f/2.2', context);
-      // Seharusnya salah satu/keduanya PASS karena masing-masing merujuk
-      // device berbeda -- saat ini keduanya divonis ambigu.
-      expect(result.status).toBe('SUSPECT');
-      expect(result.severity).toBe('HIGH');
+      expect(result.status).toBe('PASS');
+      expect(result.severity).toBe('LOW');
     });
 
-    test('BUG: "fixed focus" muncul di segmen 96 (selfie) DAN 102 (ultrawide) → SUSPECT HIGH', () => {
+    test('"fixed focus" muncul di segmen 96 (selfie) DAN 102 (ultrawide) → PASS', () => {
       const result = GroundingValidator.validate('fixed focus', context);
-      expect(result.status).toBe('SUSPECT');
-      expect(result.severity).toBe('HIGH');
+      expect(result.status).toBe('PASS');
+      expect(result.severity).toBe('LOW');
     });
 
-    test('BUG: "up to 1080p 30 fps" muncul di segmen 97 (selfie) DAN 102 (ultrawide) → SUSPECT HIGH', () => {
+    test('"up to 1080p 30 fps" muncul di segmen 97 (selfie) DAN 102 (ultrawide) → PASS', () => {
       const result = GroundingValidator.validate('up to 1080p 30 fps', context);
-      expect(result.status).toBe('SUSPECT');
-      expect(result.severity).toBe('HIGH');
+      expect(result.status).toBe('PASS');
+      expect(result.severity).toBe('LOW');
     });
   });
 
-    // ============================================================
-  // BAGIAN B — ProvenanceValidator: coordinates gagal ter-resolve
   // ============================================================
-  describe('B. ProvenanceValidator gagal resolve coordinates untuk kasus yang sama', () => {
+  // BAGIAN B — ProvenanceValidator fail-safe saat anchor tidak tersedia
+  // ============================================================
+  // Regression guard untuk jalur: multiple occurrence + anchor null
+  // (tidak tersedia) → WAJIB tetap AMBIGUOUS → wrapper SUSPECT.
+  // Resolver tidak boleh menebak occurrence manapun secara arbitrer.
+  //
+  // Anchor sengaja null di sini (bukan 'selfie'/'ultrawide') supaya
+  // coverage berbeda dari contract test #1–#3 dan Bagian D, yang
+  // menguji jalur anchor-tersedia.
+  // ============================================================
+  describe('B. ProvenanceValidator fail-safe: multiple occurrence tanpa anchor → SUSPECT', () => {
 
-    test('BUG: "bukaan f/2.2" → coordinates null, status SUSPECT', () => {
+    test('"bukaan f/2.2" tanpa anchor → coordinates null, status SUSPECT', () => {
       const result = ProvenanceValidator.resolve('bukaan f/2.2', null, context);
       expect(result.coordinates).toBeNull();
       expect(result.result.status).toBe('SUSPECT');
     });
 
-    test('BUG: "fixed focus" → coordinates null, status SUSPECT', () => {
+    test('"fixed focus" tanpa anchor → coordinates null, status SUSPECT', () => {
       const result = ProvenanceValidator.resolve('fixed focus', null, context);
       expect(result.coordinates).toBeNull();
       expect(result.result.status).toBe('SUSPECT');
@@ -117,10 +129,13 @@ describe('PARALLEL_DEVICE_SPEC_AMBIGUITY — bukti gap (belum diperbaiki)', () =
   });
 
   // ============================================================
-  // BAGIAN C — KONTROL: bukan seluruh validator rusak, hanya frasa
-  // pendek yang template-sama antar device paralel yang bermasalah.
+  // BAGIAN C — KONTROL: excerpt unik tetap PASS
   // ============================================================
-  describe('C. Kontrol — excerpt yang cukup spesifik tetap PASS (bug ini sempit, bukan meltdown validator)', () => {
+  // Membuktikan bahwa existence-only tidak berarti "semua dianggap
+  // valid tanpa peduli kondisi". Excerpt yang memang hanya punya 1
+  // occurrence tetap PASS.
+  // ============================================================
+  describe('C. Kontrol — excerpt yang cukup spesifik tetap PASS', () => {
 
     test('KONTROL: "kamera selfie 13 MP" unik (hanya di segmen 96) → PASS', () => {
       const result = GroundingValidator.validate('kamera selfie 13 MP', context);
@@ -139,14 +154,20 @@ describe('PARALLEL_DEVICE_SPEC_AMBIGUITY — bukti gap (belum diperbaiki)', () =
   });
 
   // ============================================================
-  // BAGIAN D — END-TO-END: bukti data loss nyata lewat EvidenceValidator
+  // BAGIAN D — END-TO-END: bukti fix menghilangkan false quarantine
   // ============================================================
   // Mereplikasi persis pola production: dua evidence ATOMIK dan BENAR
   // (satu tentang selfie, satu tentang ultrawide), masing-masing pakai
-  // source_excerpt pendek yang templatenya sama -- seperti yang
-  // dihasilkan model di 5/6 run pada log kemarin.
+  // source_excerpt pendek yang templatenya sama.
+  //
+  // Sebelum redesign: keduanya false-quarantine karena Grounding SUSPECT.
+  // Setelah redesign:
+  //   - Grounding existence-only → PASS
+  //   - Provenance menerima subtopic sebagai anchor → memilih
+  //     candidate span yang tepat → RESOLVED → PASS
+  //   - EvidenceValidator → accepted, VALID
   // ============================================================
-  describe('D. Dampak nyata: dua evidence sah ikut ter-quarantine (data loss)', () => {
+  describe('D. Fix end-to-end: dua evidence sah diterima, bukan lagi false-quarantine', () => {
 
     const selfieEvidence: EvidenceItem = {
       topic: 'camera',
@@ -166,23 +187,46 @@ describe('PARALLEL_DEVICE_SPEC_AMBIGUITY — bukti gap (belum diperbaiki)', () =
       reviewer_assessment: null
     };
 
-    test('BUG: evidence selfie (bukaan f/2.2) ter-quarantine walau faktanya benar', () => {
+    test('evidence selfie (bukaan f/2.2) DITERIMA karena anchor memilih candidate span yang tepat', () => {
       const report: EvidenceValidationReport = EvidenceValidator.validate(selfieEvidence, context);
-      expect(report.accepted).toBe(false);
-      expect(report.quarantineReason).toContain('GROUNDING');
+      expect(report.accepted).toBe(true);
+      expect(report.quarantineReason).toBeUndefined();
+      expect(report.finalStatus).toBe('VALID');
+
+      // Penguatan (dari Senior 1): buktikan PROVENANCE memang PASS,
+      // bukan hanya "evidence kebetulan lolos".
+      const provenance = report.results.find(r => r.rule === 'PROVENANCE');
+      expect(provenance?.status).toBe('PASS');
+
+      // Bukti lebih spesifik: coordinates terisi (resolver berhasil).
+      expect(selfieEvidence.source_coordinates?.segment_start_index).toBe(96);
     });
 
-    test('BUG: evidence ultrawide (bukaan f/2.2) JUGA ter-quarantine walau faktanya benar dan berbeda dari selfie', () => {
+    test('evidence ultrawide (bukaan f/2.2) JUGA DITERIMA dan ter-resolve ke segmen 101 yang berbeda dari selfie', () => {
       const report: EvidenceValidationReport = EvidenceValidator.validate(ultrawideEvidence, context);
-      expect(report.accepted).toBe(false);
-      expect(report.quarantineReason).toContain('GROUNDING');
+      expect(report.accepted).toBe(true);
+      expect(report.quarantineReason).toBeUndefined();
+      expect(report.finalStatus).toBe('VALID');
+
+      const provenance = report.results.find(r => r.rule === 'PROVENANCE');
+      expect(provenance?.status).toBe('PASS');
+
+      expect(ultrawideEvidence.source_coordinates?.segment_start_index).toBe(101);
     });
 
-    test('BUG: KEDUANYA hilang -- bukan cuma satu yang di-drop, dua-duanya, yang berarti fakta selfie DAN ultrawide sama-sama tidak sampai ke evidence final', () => {
-      const reportA = EvidenceValidator.validate({ ...selfieEvidence }, context);
-      const reportB = EvidenceValidator.validate({ ...ultrawideEvidence }, context);
-      expect(reportA.accepted).toBe(false);
-      expect(reportB.accepted).toBe(false);
+    test('KEDUA evidence diterima dan resolve ke segmen berbeda — bukan lagi sama-sama di-drop', () => {
+      const evidenceA: EvidenceItem = { ...selfieEvidence };
+      const evidenceB: EvidenceItem = { ...ultrawideEvidence };
+      const reportA = EvidenceValidator.validate(evidenceA, context);
+      const reportB = EvidenceValidator.validate(evidenceB, context);
+
+      expect(reportA.accepted).toBe(true);
+      expect(reportB.accepted).toBe(true);
+
+      // Bukti bahwa keduanya benar-benar di-resolve ke occurrence BERBEDA,
+      // bukan sekadar "dua-duanya diterima dengan coordinates kebetulan sama".
+      expect(evidenceA.source_coordinates?.segment_start_index).toBe(96);
+      expect(evidenceB.source_coordinates?.segment_start_index).toBe(101);
     });
   });
 });
