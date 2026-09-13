@@ -40,7 +40,14 @@ describe('ACCEPTANCE POLICY MATRIX', () => {
     expect(evidence.source_coordinates).not.toBeNull();
   });
 
-  test('GROUNDING SUSPECT → QUARANTINE', () => {
+  test('MULTIPLE OCCURRENCE (no anchor) → PROVENANCE SUSPECT → QUARANTINE', () => {
+    // Sebelum redesign (Stage 3-6), multiple lexical match ditandai
+    // Grounding SUSPECT → quarantine dengan alasan 'GROUNDING'.
+    // Setelah redesign, Grounding existence-only: multiple match = PASS.
+    // Ambiguitas occurrence ditangani Provenance (Stage 4), dan
+    // acceptance policy P0 sekarang men-quarantine karena PROVENANCE
+    // SUSPECT (Stage 6). Attribution quarantine berpindah dari
+    // GROUNDING ke PROVENANCE.
     const evidence: EvidenceItem = {
       type: 'FACT',
       claim: '6 generasi Android',
@@ -51,12 +58,14 @@ describe('ACCEPTANCE POLICY MATRIX', () => {
     expect(report.accepted).toBe(false);
     expect(report.finalStatus).toBe('QUARANTINE');
     expect(evidence.source_coordinates).toBeNull();
-    expect(report.quarantineReason).toContain('GROUNDING');
+    expect(report.quarantineReason).toContain('PROVENANCE');
   });
 
   test('PROVENANCE SUSPECT → QUARANTINE', () => {
-    // Ini sama dengan di atas karena grounding dan provenance sama-sama SUSPECT
-    // Kita bisa buat case terpisah jika perlu
+    // Setup ini sama dengan test di atasnya (multiple occurrence + no anchor).
+    // Setelah Stage 5, hanya PROVENANCE yang SUSPECT (Grounding existence-only),
+    // sehingga attribution quarantine konsisten: PROVENANCE SUSPECT.
+    // Test ini menjaga coverage P0 invariant secara langsung.
     const evidence: EvidenceItem = {
       type: 'FACT',
       claim: '6 generasi Android',
